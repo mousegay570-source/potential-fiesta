@@ -7734,8 +7734,459 @@ workspace.CurrentCamera.CameraSubject=game.Players.LocalPlayer.Character:WaitFor
   end
 })
 
-local Event67 = Window:MakeTab({"Event", "box"})
+local FeSky = Window:MakeTab({"Skybox", "cloud"})
 
-Section = Event:AddSection({
-    Name = "coming soon"
+Tab10:AddButton({
+    Name = "Sharingan", 
+    Callback = function()
+        -- ServiÃƒÂ§os
+        local TextChatService = game:GetService("TextChatService")
+        local Lighting = game:GetService("Lighting")
+        local Players = game:GetService("Players")
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local Player = Players.LocalPlayer
+        
+        -- VariÃƒÂ¡vel global para controlar o loop
+        _G.SharinganActive = true
+
+        -- Aviso no chat
+        if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then 
+            TextChatService.TextChannels.RBXGeneral:SendAsync(
+                "hi\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r[] Sharingann"
+            )
+        else 
+            print("naruto chorou no banho F")
+        end
+
+        -- FunÃƒÂ§ÃƒÂ£o para ativar ExpansÃƒÂ£o de DomÃƒÂ­nio
+        local function ativarDominio()
+            local char = Player.Character or Player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+
+            local dominio = Instance.new("Model", workspace)
+            dominio.Name = "InfiniteVoid"
+
+            local esfera = Instance.new("Part")
+            esfera.Shape = Enum.PartType.Ball
+            esfera.Size = Vector3.new(300, 300, 300)
+            esfera.Position = hrp.Position
+            esfera.Anchored = true
+            esfera.CanCollide = false
+            esfera.Material = Enum.Material.ForceField
+            esfera.Transparency = 0.3
+            esfera.Color = Color3.fromRGB(0, 0, 0)
+            esfera.Parent = dominio
+
+            local luz = Instance.new("PointLight", esfera)
+            luz.Color = Color3.fromRGB(255, 0, 0)
+            luz.Brightness = 10
+            luz.Range = 300
+
+            local ps = Instance.new("ParticleEmitter", esfera)
+            ps.Texture = "rbxassetid://243660364"
+            ps.Color = ColorSequence.new(Color3.fromRGB(0, 153, 255))
+            ps.LightEmission = 1
+            ps.Size = NumberSequence.new(3)
+            ps.Transparency = NumberSequence.new(0.2)
+            ps.Rate = 1000
+            ps.Lifetime = NumberRange.new(2)
+            ps.Speed = NumberRange.new(0)
+            ps.VelocitySpread = 180
+
+            local som = Instance.new("Sound", esfera)
+            som.SoundId = "rbxassetid://1843527678"
+            som.Volume = 2
+            som.Looped = true
+            som:Play()
+
+            local skyOld = Lighting:FindFirstChildOfClass("Sky")
+            if skyOld then
+                skyOld.Parent = nil
+            end
+
+            local newSky = Instance.new("Sky", Lighting)
+            newSky.SkyboxBk = "rbxassetid://159454299"
+            newSky.SkyboxDn = "rbxassetid://159454296"
+            newSky.SkyboxFt = "rbxassetid://159454293"
+            newSky.SkyboxLf = "rbxassetid://159454286"
+            newSky.SkyboxRt = "rbxassetid://159454300"
+            newSky.SkyboxUp = "rbxassetid://159454288"
+        end
+
+        -- Executa a expansÃƒÂ£o de domÃƒÂ­nio
+        ativarDominio()
+
+        -- ÃƒÂudio em loop infinito no jogador
+        local selectedAudioID = 405593386
+
+        task.spawn(function()
+            while _G.SharinganActive do
+                local remote = ReplicatedStorage:FindFirstChild("RE") and ReplicatedStorage.RE:FindFirstChild("1Gu1nSound1s")
+                if remote then
+                    remote:FireServer(workspace, selectedAudioID, 1)
+                end
+
+                local root = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
+                if root then
+                    local sound = Instance.new("Sound")
+                    sound.SoundId = "rbxassetid://" .. selectedAudioID
+                    sound.Volume = 1
+                    sound.Looped = false
+                    sound.Parent = root
+                    sound:Play()
+                    sound.Ended:Connect(function() sound:Destroy() end)
+                    task.wait(sound.TimeLength + 0.1)
+                else
+                    warn("HumanoidRootPart nÃƒÂ£o encontrado")
+                    task.wait(1)
+                end
+            end
+        end)
+
+        -- ========================
+        -- ATAQUE COM ARMA: Assault
+        -- ========================
+
+        local RE = ReplicatedStorage:WaitForChild("RE")
+        local ClearEvent = RE:FindFirstChild("1Clea1rTool1s")
+        local ToolEvent = RE:FindFirstChild("1Too1l")
+        local FireEvent = RE:FindFirstChild("1Gu1n")
+
+        -- Limpa ferramentas
+        local function clearAllTools()
+            if ClearEvent then
+                ClearEvent:FireServer("ClearAllTools")
+            end
+        end
+
+        -- Solicita Assault
+        local function getAssault()
+            if ToolEvent then
+                ToolEvent:InvokeServer("PickingTools", "Assault")
+            end
+        end
+
+        -- Verifica se recebeu Assault
+        local function hasAssault()
+            return Player.Backpack:FindFirstChild("Assault") ~= nil
+        end
+
+        -- Atira em parte
+        local function fireAtPart(targetPart)
+            local gunScript = Player.Backpack:FindFirstChild("Assault")
+                and Player.Backpack.Assault:FindFirstChild("GunScript_Local")
+
+            if not gunScript or not targetPart then return end
+
+            local args = {
+                targetPart,
+                targetPart,
+                Vector3.new(1e14, 1e14, 1e14),
+                targetPart.Position,
+                gunScript:FindFirstChild("MuzzleEffect"),
+                gunScript:FindFirstChild("HitEffect"),
+                0,
+                0,
+                { false },
+                {
+                    25,
+                    Vector3.new(100, 100, 100),
+                    BrickColor.new(29),
+                    0.25,
+                    Enum.Material.SmoothPlastic,
+                    0.25
+                },
+                true,
+                false
+            }
+
+            FireEvent:FireServer(unpack(args))
+        end
+
+        -- Atira em todos os jogadores
+        local function fireAtAllPlayers(times)
+            for i = 1, times do
+                for _, player in ipairs(Players:GetPlayers()) do
+                    if player ~= Player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                        fireAtPart(player.Character.HumanoidRootPart)
+                        task.wait(0.1)
+                    end
+                end
+            end
+        end
+
+        -- Loop automÃƒÂ¡tico de ataque
+        task.spawn(function()
+            while _G.SharinganActive do
+                clearAllTools()
+                getAssault()
+
+                repeat
+                    task.wait(0.2)
+                until hasAssault() or not _G.SharinganActive
+
+                if _G.SharinganActive then
+                    fireAtAllPlayers(3)
+                    task.wait(1)
+                end
+            end
+        end)
+    end
 })
+
+Tab10:AddButton({
+    Name = "Cancelar Sharingan ",
+    Callback = function()
+        -- ServiÃƒÂ§os
+        local Lighting = game:GetService("Lighting")
+        local Players = game:GetService("Players")
+        local workspace = game:GetService("Workspace")
+        local TextChatService = game:GetService("TextChatService")
+        local Player = Players.LocalPlayer
+        
+        -- Para todos os loops
+        _G.SharinganActive = false
+
+        -- Remove o modelo "InfiniteVoid" (Sharingan)
+        local dominio = workspace:FindFirstChild("InfiniteVoid")
+        if dominio then
+            dominio:Destroy()
+        end
+
+        -- Remove sons e partÃƒÂ­culas criadas dentro do personagem
+        if Player.Character then
+            for _, obj in ipairs(Player.Character:GetDescendants()) do
+                if obj:IsA("Sound") or obj:IsA("ParticleEmitter") then
+                    obj:Destroy()
+                end
+            end
+        end
+
+        -- Remove sons extras da workspace (se existirem)
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("Sound") and (obj.SoundId:find("1843527678") or obj.SoundId:find("405593386")) then
+                obj:Destroy()
+            end
+        end
+
+        -- Remove partÃƒÂ­culas da workspace
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("ParticleEmitter") then
+                obj:Destroy()
+            end
+        end
+
+        -- Limpa qualquer Sky customizado
+        for _, obj in ipairs(Lighting:GetChildren()) do
+            if obj:IsA("Sky") then
+                obj:Destroy()
+            end
+        end
+
+        -- Restaura um cÃƒÂ©u padrÃƒÂ£o
+        local defaultSky = Instance.new("Sky")
+        defaultSky.SkyboxBk = "rbxassetid://7018684000"
+        defaultSky.SkyboxDn = "rbxassetid://7018684000"
+        defaultSky.SkyboxFt = "rbxassetid://7018684000"
+        defaultSky.SkyboxLf = "rbxassetid://7018684000"
+        defaultSky.SkyboxRt = "rbxassetid://7018684000"
+        defaultSky.SkyboxUp = "rbxassetid://7018684000"
+        defaultSky.Parent = Lighting
+
+        -- Limpa ferramentas do backpack
+        if Player.Backpack then
+            for _, tool in ipairs(Player.Backpack:GetChildren()) do
+                if tool:IsA("Tool") then
+                    tool:Destroy()
+                end
+            end
+        end
+
+        -- Mensagem no chat
+        if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+            TextChatService.TextChannels.RBXGeneral:SendAsync(
+                "[] Sharingan Cancelado "
+            )
+        else
+            print("Sharingan cancelado com sucesso.")
+        end
+
+        print("Efeitos do Sharingan removidos e ambiente restaurado ")
+    end
+})
+
+local Section = Tab10:AddSection({"Skybox FE"})
+
+-- VariÃƒÂ¡veis para controlar os estados
+local SkyboxActive = false
+local CurrentTrack = nil
+local RigidTrack = nil
+
+Tab10:AddButton({
+   Name = "Skybox FE",
+   Callback = function()
+        if SkyboxActive then
+            -- Desativa skybox e animaÃƒÂ§ÃƒÂµes
+            if CurrentTrack then
+                CurrentTrack:Stop(0.1)
+                CurrentTrack = nil
+            end
+            if RigidTrack then
+                RigidTrack:Stop(0.1)
+                RigidTrack = nil
+            end
+            
+            -- Primeiro reseta a aparÃƒÂªncia
+            game:GetService("ReplicatedStorage").Remotes.ResetCharacterAppearance:FireServer()
+            
+            -- Aguarda um pouco e entÃƒÂ£o mata o personagem
+            task.wait(0.3)
+            
+            local Players = game:GetService("Players")
+            local player = Players.LocalPlayer
+            local character = player.Character
+            if character then
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    humanoid.Health = 0
+                end
+            end
+            
+            SkyboxActive = false
+            print("Skybox e andar duro removidos!")
+        else
+            -- Ativa a skybox
+            local args = {
+                {
+                    100839513065432
+                }
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ChangeCharacterBody"):InvokeServer(unpack(args))
+            
+            function missing(t, f, fallback)
+                if type(f) == t then return f end
+                return fallback 
+            end
+
+            cloneref = missing("function", cloneref, function(...) return ... end)
+
+            local Services = setmetatable({}, {
+                __index = function(_, name)
+                    return cloneref(game:GetService(name))
+                end
+            })
+
+            local Players = Services.Players
+            local player = Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:WaitForChild("Humanoid")
+
+            -- ConfiguraÃƒÂ§ÃƒÂµes da skybox
+            local Settings = {}
+            Settings["Fade In"]     = 0.1
+            Settings["Fade Out"]    = 0.1
+            Settings["Weight"]      = 1
+            Settings["Speed"]       = 1
+            Settings["Time Position"] = 0
+
+            local function LoadTrack(id)
+                local animId
+                local ok, result = pcall(function()
+                    return game:GetObjects("rbxassetid://" .. tostring(id))
+                end)
+
+                if ok and result and #result > 0 then
+                    local anim = result[1]
+                    if anim:IsA("Animation") then
+                        animId = anim.AnimationId
+                    else
+                        animId = "rbxassetid://" .. tostring(id)
+                    end
+                else
+                    animId = "rbxassetid://" .. tostring(id)
+                end
+
+                local newAnim = Instance.new("Animation")
+                newAnim.AnimationId = animId
+                local newTrack = humanoid:LoadAnimation(newAnim)
+                newTrack.Priority = Enum.AnimationPriority.Action4
+
+                local weight = Settings["Weight"]
+                if weight == 0 then weight = 0.001 end
+
+                newTrack:Play(Settings["Fade In"], weight, Settings["Speed"])
+                
+                CurrentTrack = newTrack
+                CurrentTrack.TimePosition = math.clamp(Settings["Time Position"], 0, 1) * CurrentTrack.Length
+
+                return newTrack
+            end
+
+            -- Executa a animaÃƒÂ§ÃƒÂ£o da skybox
+            local EmoteId = 101852027997337
+            LoadTrack(EmoteId)
+            
+            -- Aguarda um pouco antes de ativar o planking
+            task.wait(0.5)
+            
+            -- Ativa a animaÃƒÂ§ÃƒÂ£o de planking (andar duro/deitado)
+            local PlankingId = "rbxassetid://3695333486"
+            local plankAnim = Instance.new("Animation")
+            plankAnim.AnimationId = PlankingId
+            RigidTrack = humanoid:LoadAnimation(plankAnim)
+            RigidTrack.Priority = Enum.AnimationPriority.Movement
+            RigidTrack:Play(0.1, 1, 0)
+            
+            SkyboxActive = true
+            print("Skybox e andar duro ativados!")
+        end
+    end
+})
+
+-- BotÃƒÂ£o de reset completo
+Tab10:AddButton({
+    Name = "Para Skybox",
+    Callback = function()
+        if CurrentTrack then
+            CurrentTrack:Stop(0.1)
+            CurrentTrack = nil
+        end
+        if RigidTrack then
+            RigidTrack:Stop(0.1)
+            RigidTrack = nil
+        end
+        SkyboxActive = false
+        
+        -- Primeiro reseta a aparÃƒÂªncia
+        game:GetService("ReplicatedStorage").Remotes.ResetCharacterAppearance:FireServer()
+        
+        -- Aguarda um pouco para o remote processar
+        task.wait(0.3)
+        
+        -- Depois mata o personagem
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        local character = player.Character
+        if character then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.Health = 0
+            end
+        end
+        
+        print("AparÃƒÂªncia resetada e personagem morto!")
+    end
+})
+
+-- DetecÃƒÂ§ÃƒÂ£o automÃƒÂ¡tica de reset/morte do personagem
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+player.CharacterAdded:Connect(function()
+    -- Quando o personagem respawna, desativa tudo
+    SkyboxActive = false
+    CurrentTrack = nil
+    RigidTrack = nil
+    print("Personagem resetado - Tudo desativado")
+end)
+
