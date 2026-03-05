@@ -7734,9 +7734,9 @@ workspace.CurrentCamera.CameraSubject=game.Players.LocalPlayer.Character:WaitFor
   end
 })
 
-local FeSky = Window:MakeTab({"Skybox", "cloud"})
+local Skybox = Window:MakeTab({"Skybox", "cloud"})
 
-Tab10:AddButton({
+Skybox:AddButton({
     Name = "Sharingan", 
     Callback = function()
         -- ServiÃƒÂ§os
@@ -7934,7 +7934,7 @@ Tab10:AddButton({
     end
 })
 
-Tab10:AddButton({
+Skybox:AddButton({
     Name = "Cancelar Sharingan ",
     Callback = function()
         -- ServiÃƒÂ§os
@@ -8015,14 +8015,14 @@ Tab10:AddButton({
     end
 })
 
-local Section = Tab10:AddSection({"Skybox FE"})
+local Section = Skybox:AddSection({"Skybox FE"})
 
 -- VariÃƒÂ¡veis para controlar os estados
 local SkyboxActive = false
 local CurrentTrack = nil
 local RigidTrack = nil
 
-Tab10:AddButton({
+Skybox:AddButton({
    Name = "Skybox FE",
    Callback = function()
         if SkyboxActive then
@@ -8144,7 +8144,7 @@ Tab10:AddButton({
 })
 
 -- BotÃƒÂ£o de reset completo
-Tab10:AddButton({
+Skybox:AddButton({
     Name = "Para Skybox",
     Callback = function()
         if CurrentTrack then
