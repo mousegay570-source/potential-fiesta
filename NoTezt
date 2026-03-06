@@ -156,6 +156,317 @@ end
     end
 })
 
+local Section = TrollTab:AddSection({"FunÃƒÂ§ÃƒÂµes RGB"})
+
+local isNameActive = false
+local isBioActive = false
+
+local SectionRGBName = TrollTab :AddSection({
+    Name = "Name RGB"
+})
+
+TrollTab:AddToggle({
+    Name = "Name RGB",
+    Description = "Make the Name colorful",
+    Default = false,
+    Callback = function(value)
+        isNameActive = value
+    end
+})
+
+local SectionRGBBio = TrollTab:AddSection({
+    Name = "Bio"
+})
+
+TrollTab:AddToggle({
+    Name = "Bio RGB",
+    Description = "Make the Bio colorful",
+    Default = false,
+    Callback = function(value)
+        isBioActive = value
+    end
+})
+
+local vibrantColors = {
+    Color3.fromRGB(255, 0, 0),
+    Color3.fromRGB(0, 255, 0),
+    Color3.fromRGB(0, 0, 255),
+    Color3.fromRGB(255, 255, 0),
+    Color3.fromRGB(255, 0, 255),
+    Color3.fromRGB(0, 255, 255),
+    Color3.fromRGB(255, 165, 0),
+    Color3.fromRGB(128, 0, 128),
+    Color3.fromRGB(255, 20, 147)
+}
+
+spawn(function()
+    while true do
+        if isNameActive then
+            local randomColor = vibrantColors[math.random(#vibrantColors)]
+            local args = {
+                [1] = "PickingRPNameColor",
+                [2] = randomColor
+            }
+            game:GetService("ReplicatedStorage").RE:FindFirstChild("1RPNam1eColo1r"):FireServer(unpack(args))
+        end
+        wait(0.1)
+    end
+end)
+
+spawn(function()
+    while true do
+        if isBioActive then
+            local randomColor = vibrantColors[math.random(#vibrantColors)]
+            local args = {
+                [1] = "PickingRPBioColor",
+                [2] = randomColor
+            }
+            game:GetService("ReplicatedStorage").RE:FindFirstChild("1RPNam1eColo1r"):FireServer(unpack(args))
+        end
+        wait(0.1)
+    end
+end)
+
+-- Velocidade controlada pelo slider (quanto maior, mais rÃƒÂ¡pido)
+local rgbSpeed = 1
+
+TrollTab:AddSlider({
+    Name = "Velocidade RGB",
+    Description = "Aumenta a velocidade do efeito RGB",
+    Min = 1,
+    Max = 5,
+    Increase = 1,
+    Default = 3,
+    Callback = function(Value)
+        rgbSpeed = Value
+    end
+})
+
+-- FunÃƒÂ§ÃƒÂ£o para criar cor RGB suave com HSV
+local function getRainbowColor(speedMultiplier)
+    local h = (tick() * speedMultiplier % 5) / 5 -- gira o hue suavemente de 0 a 1
+    return Color3.fromHSV(h, 1, 1)
+end
+
+-- FunÃƒÂ§ÃƒÂ£o para disparar eventos
+local function fireServer(eventName, args)
+    local event = game:GetService("ReplicatedStorage"):FindFirstChild("RE")
+    if event and event:FindFirstChild(eventName) then
+        pcall(function()
+            event[eventName]:FireServer(unpack(args))
+        end)
+    end
+end
+
+local Section = TrollTab:AddSection({"RGB para usar em vocÃƒÂª"})
+
+-- Nome + Bio RGB  juntos
+local nameBioRGBActive = false
+TrollTab:AddToggle({
+    Name = "Nome + Bio RGB ",
+    Default = false,
+    Callback = function(state)
+        nameBioRGBActive = state
+        if state then
+            task.spawn(function()
+                while nameBioRGBActive and LocalPlayer.Character do
+                    local color = getRainbowColor(rgbSpeed)
+                    fireServer("1RPNam1eColo1r", { "PickingRPNameColor", color })
+                    fireServer("1RPNam1eColo1r", { "PickingRPBioColor", color })
+                    task.wait(0.03)
+                end
+            end)
+        end
+    end
+})
+
+local ToggleCorpo = TrollTab:AddToggle({
+    Name = "RGB Corpo",
+    Description = "RGB  no corpo",
+    Default = false
+})
+ToggleCorpo:Callback(function(Value)
+    getgenv().rgbCorpo = Value
+    task.spawn(function()
+        while getgenv().rgbCorpo do
+            local remote = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes")
+            if remote and remote:FindFirstChild("ChangeBodyColor") then
+                pcall(function()
+                    remote.ChangeBodyColor:FireServer({
+                        BrickColor.new(getRainbowColor(rgbSpeed))
+                    })
+                end)
+            end
+            task.wait(0.1)
+        end
+    end)
+end)
+
+local ToggleCabelo = TrollTab:AddToggle({
+    Name = "RGB Cabelo",
+    Description = "RGB  no cabelo",
+    Default = false
+})
+ToggleCabelo:Callback(function(Value)
+    getgenv().rgbCabelo = Value
+    task.spawn(function()
+        while getgenv().rgbCabelo do
+            fireServer("1Max1y", {
+                "ChangeHairColor2",
+                getRainbowColor(rgbSpeed)
+            })
+            task.wait(0.5)
+        end
+    end)
+end)
+
+local Section = TrollTab:AddSection({"veiculos e casa"})
+
+local ToggleCasa = TrollTab:AddToggle({
+    Name = "RGB Casa",
+    Description = "RGB  na casa",
+    Default = false
+})
+ToggleCasa:Callback(function(Value)
+    getgenv().rgbCasa = Value
+    task.spawn(function()
+        while getgenv().rgbCasa do
+            fireServer("1Player1sHous1e", {
+                "ColorPickHouse",
+                getRainbowColor(rgbSpeed)
+            })
+            task.wait(0.1)
+        end
+    end)
+end)
+
+-- Carro RGB 
+local carRGBActive = false
+TrollTab:AddToggle({
+    Name = "Carro RGB  (Premium)",
+    Description = "Altera a cor do carro com RGB contÃƒÂ­nuo. Pode causar kick se nÃƒÂ£o for premium!",
+    Default = false,
+    Callback = function(state)
+        carRGBActive = state
+        if state then
+            task.spawn(function()
+                while carRGBActive and LocalPlayer.Character do
+                    local color = getRainbowColor(rgbSpeed)
+                    fireServer("1Player1sCa1r", { "PickingCarColor", color })
+                    task.wait(0.03)
+                end
+            end)
+        end
+    end
+})
+
+local ToggleBicicleta = TrollTab:AddToggle({
+    Name = "RGB Bicicleta",
+    Description = "RGB na bicicleta",
+    Default = false
+})
+ToggleBicicleta:Callback(function(Value)
+    getgenv().rgbBicicleta = Value
+    task.spawn(function()
+        while getgenv().rgbBicicleta do
+            fireServer("1Player1sCa1r", {
+                "NoMotorColor",
+                getRainbowColor(rgbSpeed)
+            })
+            task.wait(0.1)
+        end
+    end)
+end)
+
+local Section = TrollTab:AddSection({"itens/tool"})
+
+-- NOVO TOGGLE: RÃƒÂ¡dio RGB
+local radioRGBActive = false
+TrollTab:AddToggle({
+    Name = "RÃƒÂ¡dio RGB  ",
+    Description = "Altera a cor do rÃƒÂ¡dio com RGB contÃƒÂ­nuo",
+    Default = false,
+    Callback = function(state)
+        radioRGBActive = state
+        if state then
+            task.spawn(function()
+                while radioRGBActive and LocalPlayer.Character do
+                    local color = getRainbowColor(rgbSpeed)
+                    local success, remote = pcall(function()
+                        return LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("ToolGui"):WaitForChild("ToolSettings"):WaitForChild("Settings"):WaitForChild("PropsColor"):WaitForChild("SetColor")
+                    end)
+                    if success and remote then
+                        pcall(function()
+                            remote:FireServer(color)
+                        end)
+                    end
+                    task.wait(0.03)
+                end
+            end)
+        end
+    end
+})
+
+local ToggleMegafone = TrollTab:AddToggle({
+    Name = "RGB Megafone",
+    Description = "RGB  no megafone",
+    Default = false
+})
+ToggleMegafone:Callback(function(Value)
+    getgenv().rgbMegafone = Value
+    task.spawn(function()
+        while getgenv().rgbMegafone do
+            local color = getRainbowColor(rgbSpeed)
+            local gui = game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui")
+            if gui then
+                local btn = gui:FindFirstChild("ToolGui")
+                if btn then
+                    local settings = btn:FindFirstChild("ToolSettings")
+                    if settings then
+                        local props = settings:FindFirstChild("Settings"):FindFirstChild("PropsColor")
+                        if props and props:FindFirstChild("SetColor") then
+                            pcall(function()
+                                props.SetColor:FireServer(color)
+                            end)
+                        end
+                    end
+                end
+            end
+            task.wait(0.1)
+        end
+    end)
+end)
+
+local ToggleRosquinha = TrollTab:AddToggle({
+    Name = "RGB Rosquinha",
+    Description = "RGB  na rosquinha",
+    Default = false
+})
+ToggleRosquinha:Callback(function(Value)
+    getgenv().rgbRosquinha = Value
+    task.spawn(function()
+        while getgenv().rgbRosquinha do
+            local color = getRainbowColor(rgbSpeed)
+            local gui = game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui")
+            if gui then
+                local btn = gui:FindFirstChild("ToolGui")
+                if btn then
+                    local settings = btn:FindFirstChild("ToolSettings")
+                    if settings then
+                        local props = settings:FindFirstChild("Settings"):FindFirstChild("PropsColor")
+                        if props and props:FindFirstChild("SetColor") then
+                            pcall(function()
+                                props.SetColor:FireServer(color)
+                            end)
+                        end
+                    end
+                end
+            end
+            task.wait(0.1)
+        end
+    end)
+end)
+
 local ToolsTab = Window:MakeTab({"Itens", "backpack"})
 
 local colorsTable = {
@@ -4257,7 +4568,7 @@ Ava:AddButton({
     end
 })
 
-local Section = Tab3:AddSection({"Avatar Editor"})
+local Section = Ava:AddSection({"Avatar Editor"})
 -- BotÃƒÂ£o para equipar partes do corpo
 
 -- Cria um botÃƒÂ£o para equipar todas as partes do corpo
