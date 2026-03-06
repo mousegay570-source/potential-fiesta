@@ -4152,9 +4152,242 @@ end
 updatePlayerList()
 
 
-local Tab = Window:MakeTab({"Avatar", "rbxassetid://10734952036"})
+local Ava = Window:MakeTab({"Avatar", "rbxassetid://10734952036"})
 
-Tab:AddSection({ Name = "Copiar Skin" })
+local Section = Ava:AddSection({"Roupas 3D"})
+
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Namespace para evitar conflitos
+local AvatarManager = {}
+AvatarManager.ReplicatedStorage = ReplicatedStorage
+
+-- FunÃƒÂ§ÃƒÂ£o para exibir notificaÃƒÂ§ÃƒÂ£o
+function AvatarManager:MostrarNotificacao(mensagem)
+    pcall(function()
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Aviso",
+            Text = mensagem,
+            Duration = 5
+        })
+    end)
+end
+
+-- Tabela de avatares
+AvatarManager.Avatares = {
+    { Nome = "Gato de Manga", ID = 124948425515124 },
+    { Nome = "Tung Saur", ID = 117098257036480 },
+    { Nome = "Tralaleiro", ID = 99459753608381 },
+    { Nome = "Monstro S.A", ID = 123609977175226 },
+    { Nome = "Trenzinho", ID = 80468697076178 },
+    { Nome = "Dino", ID = 11941741105 },
+    { Nome = "Pou idoso", ID = 15742966010  },
+    { Nome = "Coco/boxt@", ID = 77013984520332  },
+    { Nome = "Coelho", ID = 71797333686800  },
+    { Nome = "HipopÃƒÂ³tamo", ID = 73215892129281 },
+    { Nome = "Ratatui", ID = 108557570415453 },
+    { Nome = "Galinha", ID = 71251793812515 },
+    { Nome = "Pepa pig", ID = 92979204778377 },
+    { Nome = "pinguin", ID = 94944293759578 },
+    { Nome = "Sid", ID = 87442757321244 },
+    { Nome = "puga grande", ID = 111436158728716 },
+    { Nome = "SHREK AMALDIÃƒâ€¡OADO", ID = 120960401202173 },
+    { Nome = "mosquito grande", ID = 108052868536435 },
+    { Nome = "Noob Invertido", ID = 106596990206151 },
+    { Nome = "Pato(a)", ID = 135132836238349 },
+    { Nome = "Cachorro Chihuahua", ID = 18656467256 },
+    { Nome = "Gato sla", ID = 18994959003 },
+    { Nome = "Gato fei ", ID = 77506186615650 },
+    { Nome = "Inpostor", ID = 18234669337 },
+    { Nome = "Simon amarelo", ID = 75183593514657 },
+    { Nome = "Simon azul", ID = 76155710249925 }
+}
+
+-- FunÃƒÂ§ÃƒÂ£o para obter os nomes dos avatares para o dropdown
+function AvatarManager:GetAvatarNames()
+    local nomes = {}
+    for _, avatar in ipairs(self.Avatares) do
+        table.insert(nomes, avatar.Nome)
+    end
+    return nomes
+end
+
+-- FunÃƒÂ§ÃƒÂ£o para equipar o avatar
+function AvatarManager:EquiparAvatar(avatarName)
+    for _, avatar in ipairs(self.Avatares) do
+        if avatar.Nome == avatarName then
+            local args = { avatar.ID }
+            local success, result = pcall(function()
+                return self.ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Wear"):InvokeServer(unpack(args))
+            end)
+            if success then
+                self:MostrarNotificacao("Avatar " .. avatarName .. " equipado com sucesso!")
+            else
+                self:MostrarNotificacao("Falha ao equipar o avatar " .. avatarName .. "!")
+            end
+            return
+        end
+    end
+    self:MostrarNotificacao("Avatar " .. avatarName .. " nÃƒÂ£o encontrado!")
+end
+
+-- Tab3: OpÃƒÂ§ÃƒÂ£o de Avatar
+-- Dropdown para avatares
+local AvatarDropdown = Ava:AddDropdown({
+    Name = "assesorios 3D",
+    Description = "Selecione  para equipar",
+    Default = nil,
+    Options = AvatarManager:GetAvatarNames(),
+    Callback = function(avatarSelecionado)
+        _G.SelectedAvatar = avatarSelecionado
+    end
+})
+
+-- BotÃƒÂ£o para equipar avatar
+Ava:AddButton({
+    Name = "equipar ",
+    Description = "Equipar selecionado",
+    Callback = function()
+        if not _G.SelectedAvatar or _G.SelectedAvatar == "" then
+            AvatarManager:MostrarNotificacao("Nenhum avatar selecionado!")
+            return
+        end
+        AvatarManager:EquiparAvatar(_G.SelectedAvatar)
+    end
+})
+
+local Section = Tab3:AddSection({"Avatar Editor"})
+-- BotÃƒÂ£o para equipar partes do corpo
+
+-- Cria um botÃƒÂ£o para equipar todas as partes do corpo
+Ava:AddButton({
+    Name = "Macaco",
+    Callback = function()
+        local args = {
+            {
+                79397492843080, -- Perna Direita
+                128106725992124,  -- Perna Esquerda
+                129643681805465,  -- BraÃƒÂ§o Direito
+                121845409370294,  -- BraÃƒÂ§o Esquerdo
+                124374125166137, -- Torso
+                133717899283546   -- CabeÃƒÂ§a
+            }
+        }
+        game:GetService("ReplicatedStorage")
+            :WaitForChild("Remotes")
+            :WaitForChild("ChangeCharacterBody")
+            :InvokeServer(unpack(args))
+        print("Todas as partes do corpo equipadas!")
+    end
+})
+
+Ava:AddButton({
+    Name = "mini garanhao",
+    Callback = function()
+        local args = {
+            {
+                124355047456535, -- Perna Direita
+                120507500641962,  -- Perna Esquerda
+                82273782655463,  -- BraÃƒÂ§o Direito
+                113625313757230,  -- BraÃƒÂ§o Esquerdo
+                109182039511426, -- Torso
+                0   -- CabeÃƒÂ§a
+            }
+        }
+        game:GetService("ReplicatedStorage")
+            :WaitForChild("Remotes")
+            :WaitForChild("ChangeCharacterBody")
+            :InvokeServer(unpack(args))
+        print("Todas as partes do corpo equipadas!")
+    end
+})
+
+Ava:AddButton({
+    Name = "Capybara",
+    Callback = function()
+        local args = {
+            {
+                98454038846291, -- Perna Direita
+                93110795723782,  -- Perna Esquerda
+                131681603005543,  -- BraÃƒÂ§o Direito
+                107032747230578,  -- BraÃƒÂ§o Esquerdo
+                129341990941517, -- Torso
+                109137349673343   -- CabeÃƒÂ§a
+            }
+        }
+        game:GetService("ReplicatedStorage")
+            :WaitForChild("Remotes")
+            :WaitForChild("ChangeCharacterBody")
+            :InvokeServer(unpack(args))
+        print("Todas as partes do corpo equipadas!")
+    end
+})
+
+Ava:AddButton({
+    Name = "Mini ursinho",
+    Callback = function()
+        local args = {
+            {
+                107431241133468, -- perna Direita
+                103380121023771, --Perna Esquerda
+                76079756909323, -- BraÃƒÂ§o-Direito
+                82598238110471, --Bra-o Esquerdo
+                112722466960512, --Torso
+                93369435761093 -- Head
+            }
+        }
+        game:GetService("ReplicatedStorage")
+            :WaitForChild("Remotes")
+            :WaitForChild("ChangeCharacterBody")
+            :InvokeServer(unpack(args))
+        print("Todas as partes do corpo equipadas!")
+    end
+})
+
+Ava:AddButton({
+    Name = "Boneca Girly",
+    Callback = function()
+        local args = {
+            {
+                18839823882, -- Perna-direita
+                18839824402, -- Perna-esquerda
+                18839824209, -- Bra-o-direito
+                18839824132, -- Bra-o-esquerdo
+                18839824113, -- Torso
+                18839824136 -- Head
+            }
+        }
+        game:GetService("ReplicatedStorage")
+            :WaitForChild("Remotes")
+            :WaitForChild("ChangeCharacterBody")
+            :InvokeServer(unpack(args))
+        print("Todas as partes do corpo equipadas!")
+    end
+})
+
+Ava:AddButton({
+    Name = "Gigante musculoso",
+    Callback = function()
+        local args = {
+            {
+                117894774809436, -- Perna-direita
+                98639514624960, -- Perna-Esquerda
+                76780277149069, -- Bra-o-Direito
+                114025246656510, -- Bra-o-esquerdo
+                76928754971570, -- Torso
+                0   -- CabeÃƒÂ§a
+            }
+        }
+        game:GetService("ReplicatedStorage")
+            :WaitForChild("Remotes")
+            :WaitForChild("ChangeCharacterBody")
+            :InvokeServer(unpack(args))
+        print("Todas as partes do corpo equipadas!")
+    end
+})
+
+Ava:AddSection({ Name = "Copiar Skin" })
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -4172,7 +4405,7 @@ local function GetPlayerNames()
 end
 
 -- Dropdown de seleÃ§Ã£o de jogador
-local Dropdown = Tab:AddDropdown({
+local Dropdown = Ava:AddDropdown({
     Name = "Selecionar Jogador",
     Options = GetPlayerNames(),
     Default = Target,
@@ -4189,7 +4422,7 @@ end
 Players.PlayerAdded:Connect(UpdateDropdown)
 Players.PlayerRemoving:Connect(UpdateDropdown)
 
-Tab:AddButton({
+Ava:AddButton({
     Name = "Copiar Avatar",
     Callback = function()
         if not Target then return end
@@ -8190,7 +8423,7 @@ player.CharacterAdded:Connect(function()
     print("Personagem resetado - Tudo desativado")
 end)
 
-local protect = Window:MakeTab({"Protection", "protect"})
+local protect = Window:MakeTab({"Protection", "shield"})
 
 -- Toggle para Anti-Sit
 local antiSitConnection = nil
@@ -8253,7 +8486,7 @@ protect:AddToggle({
     end
 })
 
-local Music = Window:MakeTab({"Sound", "mucic"})
+local Music = Window:MakeTab({"Sound", "radio"})
 
 local loopAtivo = false
 local InputID = ""
