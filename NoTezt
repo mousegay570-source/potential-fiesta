@@ -1,7 +1,7 @@
 local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/minhdepzai-v/LibraryRobloc/refs/heads/main/RedzLibrary.lua"))()
 
 local Window = redzlib:MakeWindow({
-  Title = "Xavier Hub",
+  Title = "Xavier Hub         Brookhaven RP",
   SubTitle = "by AstraX",
   SaveFolder = "goXpp.lua"
 })
@@ -10,7 +10,7 @@ Window:AddMinimizeButton({
     Corner = { CornerRadius = UDim.new(35, 1) },
 })
 
-local Tab1 = Window:MakeTab({"credits", "cherry"})
+local Tab1 = Window:MakeTab({"credits", "rbxassetid://18505728201"})
 
 Tab1:AddDiscordInvite({
     Name = "Fenzoxy",
@@ -4569,9 +4569,29 @@ Ava:AddButton({
 })
 
 local Section = Ava:AddSection({"Avatar Editor"})
--- BotÃƒÂ£o para equipar partes do corpo
 
--- Cria um botÃƒÂ£o para equipar todas as partes do corpo
+Ava:AddButton({
+    Name = "Adidas Animation",
+    Callback = function()
+        local args = {
+            {
+                126354114956642, -- perna Direita
+                106810508343012, --Perna Esquerda
+                124765145869332, -- BraÃƒÂ§o-Direito
+                93993406355955, --Bra-o Esquerdo
+                115715495298905, --Torso
+                123695349157584,
+                106537993816942
+            }
+        }
+        game:GetService("ReplicatedStorage")
+            :WaitForChild("Remotes")
+            :WaitForChild("ChangeCharacterBody")
+            :InvokeServer(unpack(args))
+        print("Todas as partes do corpo equipadas!")
+    end
+})
+
 Ava:AddButton({
     Name = "Macaco",
     Callback = function()
@@ -4706,7 +4726,6 @@ local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 
 local Target = nil
 
--- FunÃ§Ã£o para obter os CHAOSs dos jogadores
 local function GetPlayerNames()
     local PlayerNames = {}
     for _, player in ipairs(Players:GetPlayers()) do
@@ -4715,7 +4734,6 @@ local function GetPlayerNames()
     return PlayerNames
 end
 
--- Dropdown de seleÃ§Ã£o de jogador
 local Dropdown = Ava:AddDropdown({
     Name = "Selecionar Jogador",
     Options = GetPlayerNames(),
@@ -4725,7 +4743,6 @@ local Dropdown = Ava:AddDropdown({
     end
 })
 
--- Atualiza opÃ§Ãµes do dropdown quando alguÃ©m entra ou sai
 local function UpdateDropdown()
     Dropdown:Refresh(GetPlayerNames(), true)
 end
@@ -4841,6 +4858,257 @@ Ava:AddButton({
                     end
                 end
             end
+        end
+    end
+})
+
+-- copy 2
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Remotes = ReplicatedStorage:WaitForChild("Remotes")
+
+local Target = nil
+local TargetName = nil
+local CopyEnabled = false
+local CopyThread = nil
+
+local function CopyAvatar()
+    local LP = Players.LocalPlayer
+    local LChar = LP.Character
+
+    local TPlayer = nil
+    if TargetName and TargetName ~= "" then
+        TPlayer = Players:FindFirstChild(TargetName)
+    elseif Target then
+        TPlayer = Players:FindFirstChild(Target)
+    end
+
+    if not TPlayer then
+        warn("Target player not found.")
+        return
+    end
+
+    if not TPlayer.Character then
+        warn("Target character not loaded.")
+        return
+    end
+
+    if not LChar then
+        warn("Local character not found.")
+        return
+    end
+
+    local LHumanoid = LChar:FindFirstChildOfClass("Humanoid")
+    local THumanoid = TPlayer.Character:FindFirstChildOfClass("Humanoid")
+
+    if not LHumanoid or not THumanoid then
+        warn("Humanoid not found.")
+        return
+    end
+
+    local LDesc = LHumanoid:GetAppliedDescription()
+    local PDesc = THumanoid:GetAppliedDescription()
+
+    print("Removing local accessories...")
+    for _, acc in ipairs(LDesc:GetAccessories(true)) do
+        if acc.AssetId and tonumber(acc.AssetId) then
+            Remotes.Wear:InvokeServer(tonumber(acc.AssetId))
+            task.wait(0.2)
+            if not CopyEnabled then return end
+        end
+    end
+
+    if tonumber(LDesc.Shirt) and LDesc.Shirt ~= 0 then
+        print("Removing local shirt...")
+        Remotes.Wear:InvokeServer(tonumber(LDesc.Shirt))
+        task.wait(0.2)
+        if not CopyEnabled then return end
+    end
+
+    if tonumber(LDesc.Pants) and LDesc.Pants ~= 0 then
+        print("Removing local pants...")
+        Remotes.Wear:InvokeServer(tonumber(LDesc.Pants))
+        task.wait(0.2)
+        if not CopyEnabled then return end
+    end
+
+    if tonumber(LDesc.Face) and LDesc.Face ~= 0 then
+        print("Removing local face...")
+        Remotes.Wear:InvokeServer(tonumber(LDesc.Face))
+        task.wait(0.2)
+        if not CopyEnabled then return end
+    end
+
+    print("Applying target body colors...")
+    local argsBody = {
+        [1] = {
+            [1] = PDesc.Torso,
+            [2] = PDesc.RightArm,
+            [3] = PDesc.LeftArm,
+            [4] = PDesc.RightLeg,
+            [5] = PDesc.LeftLeg,
+            [6] = PDesc.Head
+        }
+    }
+    Remotes.ChangeCharacterBody:InvokeServer(unpack(argsBody))
+    task.wait(0.5)
+    if not CopyEnabled then return end
+
+    if tonumber(PDesc.Shirt) and PDesc.Shirt ~= 0 then
+        print("Applying shirt...")
+        Remotes.Wear:InvokeServer(tonumber(PDesc.Shirt))
+        task.wait(0.3)
+        if not CopyEnabled then return end
+    end
+
+    if tonumber(PDesc.Pants) and PDesc.Pants ~= 0 then
+        print("Applying pants...")
+        Remotes.Wear:InvokeServer(tonumber(PDesc.Pants))
+        task.wait(0.3)
+        if not CopyEnabled then return end
+    end
+
+    if tonumber(PDesc.Face) and PDesc.Face ~= 0 then
+        print("Applying face...")
+        Remotes.Wear:InvokeServer(tonumber(PDesc.Face))
+        task.wait(0.3)
+        if not CopyEnabled then return end
+    end
+
+    print("Applying accessories...")
+    for _, v in ipairs(PDesc:GetAccessories(true)) do
+        if v.AssetId and tonumber(v.AssetId) then
+            Remotes.Wear:InvokeServer(tonumber(v.AssetId))
+            task.wait(0.3)
+            if not CopyEnabled then return end
+        end
+    end
+
+    local SkinColor = TPlayer.Character:FindFirstChild("Body Colors")
+    if SkinColor then
+        print("Applying skin color...")
+        Remotes.ChangeBodyColor:FireServer(tostring(SkinColor.HeadColor))
+        task.wait(0.3)
+        if not CopyEnabled then return end
+    end
+
+    if tonumber(PDesc.IdleAnimation) and PDesc.IdleAnimation ~= 0 then
+        print("Applying idle animation...")
+        Remotes.Wear:InvokeServer(tonumber(PDesc.IdleAnimation))
+        task.wait(0.3)
+        if not CopyEnabled then return end
+    end
+
+    local Bag = TPlayer:FindFirstChild("PlayersBag")
+    if Bag then
+        if Bag:FindFirstChild("RPName") and Bag.RPName.Value ~= "" then
+            print("Applying RP name...")
+            Remotes.RPNameText:FireServer("RolePlayName", Bag.RPName.Value)
+            task.wait(0.3)
+            if not CopyEnabled then return end
+        end
+        if Bag:FindFirstChild("RPBio") and Bag.RPBio.Value ~= "" then
+            print("Applying RP bio...")
+            Remotes.RPNameText:FireServer("RolePlayBio", Bag.RPBio.Value)
+            task.wait(0.3)
+            if not CopyEnabled then return end
+        end
+        if Bag:FindFirstChild("RPNameColor") then
+            print("Applying RP name color...")
+            Remotes.RPNameColor:FireServer("PickingRPNameColor", Bag.RPNameColor.Value)
+            task.wait(0.3)
+            if not CopyEnabled then return end
+        end
+        if Bag:FindFirstChild("RPBioColor") then
+            print("Applying RP bio color...")
+            Remotes.RPNameColor:FireServer("PickingRPBioColor", Bag.RPBioColor.Value)
+            task.wait(0.3)
+        end
+    end
+
+    print("Avatar copy complete.")
+end
+
+local function StartCopyLoop()
+    CopyThread = task.spawn(function()
+        while CopyEnabled do
+            local hasTarget = false
+            if TargetName and TargetName ~= "" then
+                hasTarget = Players:FindFirstChild(TargetName) ~= nil
+            elseif Target then
+                hasTarget = Players:FindFirstChild(Target) ~= nil
+            end
+
+            if hasTarget then
+                CopyAvatar()
+            else
+                warn("No valid target found. Waiting...")
+            end
+
+            task.wait(1)
+        end
+    end)
+end
+
+local function StopCopyLoop()
+    CopyEnabled = false
+    if CopyThread then
+        task.cancel(CopyThread)
+        CopyThread = nil
+    end
+    print("Copy avatar stopped.")
+end
+
+Ava:AddTextBox({
+    Name = "Player Name",
+    Description = "Enter the player name to copy avatar from",
+    PlaceholderText = "Username...",
+    Callback = function(Value)
+        TargetName = Value
+        print("Target set to: " .. tostring(Value))
+    end
+})
+
+local function GetPlayerNames()
+    local PlayerNames = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        table.insert(PlayerNames, player.Name)
+    end
+    return PlayerNames
+end
+
+local Dropdown = Ava:AddDropdown({
+    Name = "Select Player (Dropdown)",
+    Options = GetPlayerNames(),
+    Default = Target,
+    Callback = function(Value)
+        Target = Value
+        print("Dropdown target set to: " .. tostring(Value))
+    end
+})
+
+local function UpdateDropdown()
+    Dropdown:Refresh(GetPlayerNames(), true)
+end
+
+Players.PlayerAdded:Connect(UpdateDropdown)
+Players.PlayerRemoving:Connect(UpdateDropdown)
+
+Ava:AddToggle({
+    Name = "Copy Avatar",
+    Default = false,
+    Callback = function(v)
+        if v then
+            local hasTarget = (TargetName and TargetName ~= "") or (Target ~= nil)
+            if not hasTarget then
+                warn("No target selected. Enter a player name or pick from dropdown.")
+                return
+            end
+            print("Copy avatar enabled.")
+            CopyEnabled = true
+            StartCopyLoop()
+        else
+            StopCopyLoop()
         end
     end
 })
@@ -8722,7 +8990,6 @@ Skybox:AddButton({
     end
 })
 
--- DetecÃƒÂ§ÃƒÂ£o automÃƒÂ¡tica de reset/morte do personagem
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
@@ -8736,7 +9003,6 @@ end)
 
 local protect = Window:MakeTab({"Protection", "shield"})
 
--- Toggle para Anti-Sit
 local antiSitConnection = nil
 local antiSitEnabled = false
 
@@ -8944,7 +9210,6 @@ local function createSoundDropdown(title, musicOptions, defaultOption)
     })
 end
 
--- Dropdown "Memes"
 createSoundDropdown("Selecione um meme", {
     ["Memes"] = {
         {name = "pankapakan", id = "122547522269143"}, 
@@ -9067,7 +9332,6 @@ createSoundDropdown("Selecione um meme", {
 
 local Section = Music:AddSection({"Loop ÃƒÂ¡udio estourado"})
 
---// Toggle de loop para som fixo (rbxassetid://6314880174)
 local loopSomFixoAtivo = false
 local somFixoID = 6314880174
 
@@ -9107,7 +9371,6 @@ Music:AddToggle({
 
 local Section = Music:AddSection({" tacar o terror ou efeito no server"})
 
--- Dropdown "Efeito/Terror"
 createSoundDropdown("Selecione um terror ou efeito", {
     ["efeito/terror"] = {
         {name = "jumpscar", id = "91784486966761"},
@@ -9214,7 +9477,6 @@ Music:AddTextBox({
     end
 })
 
--- Dropdowns para Tab8
 local function createMusicDropdown(title, musicOptions, defaultOption)
     local musicNames = {}
     local categoryMap = {}
@@ -9228,7 +9490,7 @@ local function createMusicDropdown(title, musicOptions, defaultOption)
     end
 
     local function playMusic(soundId)
-        tocarMusica(tostring(soundId)) -- Usa a funÃƒÂ§ÃƒÂ£o tocarMusica para tocar em todos os contextos
+        tocarMusica(tostring(soundId)) 
     end
 
     Music:AddDropdown({
@@ -9248,7 +9510,6 @@ local function createMusicDropdown(title, musicOptions, defaultOption)
     })
 end
 
--- Dropdown "ForrÃƒÂ³"
 createMusicDropdown("ForrÃƒÂ³", {
     ["forro"] = {
         {name = "forrÃƒÂ³ ja cansou", id = "74812784884330"},
@@ -9267,7 +9528,6 @@ createMusicDropdown("ForrÃƒÂ³", {
     }
 }, "Option 1")
 
--- Dropdown "MÃƒÂºsicas e Memes AleatÃƒÂ³rio"
 createMusicDropdown("MÃƒÂºsicas e Memes AleatÃƒÂ³rio", {
     ["forro"] = {
         {name = "ANXIETY (Amapiano Re-fix)", id = "101483901475189"}, 
@@ -9294,7 +9554,6 @@ createMusicDropdown("MÃƒÂºsicas e Memes AleatÃƒÂ³rio", {
     }
 }, "Option 1")
 
--- Dropdown "Funk"
 createMusicDropdown("Funk", {
     ["Funk"] = {
         {name = "Deixa eu mandar meu passinho", id = "77741294709660"},
@@ -9327,7 +9586,6 @@ createMusicDropdown("Funk", {
     }
 }, "Option 1")
 
--- Dropdown "Phonk"
 createMusicDropdown("Phonk", {
     ["phonk"] = {
         {name = "Clima lindo", id = "118507373399694"},
