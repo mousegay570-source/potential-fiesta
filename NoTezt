@@ -1,7 +1,7 @@
 local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/minhdepzai-v/LibraryRobloc/refs/heads/main/RedzLibrary.lua"))()
 
 local Window = redzlib:MakeWindow({
-  Title = "Xavier Hub         Brookhaven RP",
+  Title = "Xavier Hub         Brookhaven RP           [ Normal ]",
   SubTitle = "by AstraX",
   SaveFolder = "goXpp.lua"
 })
@@ -467,7 +467,31 @@ ToggleRosquinha:Callback(function(Value)
     end)
 end)
 
-local ToolsTab = Window:MakeTab({"Itens", "backpack"})
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+TrollTab:AddToggle({
+    Name = "Invite Family All beta",
+    Default = false,
+    Callback = function(v)
+        _G.InviteFamilyAll = v
+        
+        while _G.InviteFamilyAll do
+            task.wait(2)
+            
+            for _,plr in pairs(Players:GetPlayers()) do
+                if plr ~= LocalPlayer then
+                    pcall(function()
+                        game:GetService("ReplicatedStorage").FamilyInvite:FireServer(plr)
+                    end)
+                end
+            end
+            
+        end
+    end
+})
+
+local ToolsTab = Window:MakeTab({"Item", "backpack"})
 
 local colorsTable = {
     {Name = "Vermelho", Color = Color3.fromRGB(255, 0, 0)},
