@@ -467,30 +467,6 @@ ToggleRosquinha:Callback(function(Value)
     end)
 end)
 
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
-TrollTab:AddToggle({
-    Name = "Invite Family All beta",
-    Default = false,
-    Callback = function(v)
-        _G.InviteFamilyAll = v
-        
-        while _G.InviteFamilyAll do
-            task.wait(2)
-            
-            for _,plr in pairs(Players:GetPlayers()) do
-                if plr ~= LocalPlayer then
-                    pcall(function()
-                        game:GetService("ReplicatedStorage").FamilyInvite:FireServer(plr)
-                    end)
-                end
-            end
-            
-        end
-    end
-})
-
 local ToolsTab = Window:MakeTab({"Item", "backpack"})
 
 local colorsTable = {
@@ -9087,7 +9063,7 @@ protect:AddToggle({
     end
 })
 
-local Family= Window:MakeTab({"More", "rbxassetid://109251560"})
+local Family= Window:MakeTab({"More [OP]", "rbxassetid://13065286609"})
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -9158,7 +9134,7 @@ local function stopLoop()
 end
 
 Family:AddToggle({
-    Name = "Invite family all",
+    Name = "Invite family all [OP]",
     Default = false,
     Callback = function(v)
         if v then
@@ -9193,3 +9169,252 @@ task.spawn(function()
         task.wait(1)
     end
 end)
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local RE = ReplicatedStorage:WaitForChild("RE"):WaitForChild("1Playe1rTrigge1rEven1t")
+local toggleEnabled = false
+local loopThread = nil
+
+local function getPlayerList()
+    local list = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= Players.LocalPlayer then
+            table.insert(list, player.Name) -- .Name = username, bukan DisplayName
+        end
+    end
+    return list
+end
+
+local function fireScript1(username)
+    local player = Players:FindFirstChild(username)
+    if player then
+        local args = {
+            "Client2Client",
+            "Request: Piggyback!",
+            player
+        }
+        RE:FireServer(unpack(args))
+        print("[Script 1] Fired for player: " .. username)
+    end
+end
+
+local function fireScript2(username)
+    local player = Players:FindFirstChild(username)
+    if player then
+        local args = {
+            "DropButtonStopAll",
+            player
+        }
+        RE:FireServer(unpack(args))
+        print("[Script 2] Fired for player: " .. username)
+    end
+end
+
+local function startLoop()
+    loopThread = task.spawn(function()
+        print("[Loop] Started")
+        while toggleEnabled do
+            local playerList = getPlayerList()
+
+            if #playerList == 0 then
+                print("[Loop] No players found, waiting...")
+                task.wait(1)
+                continue
+            end
+
+            for _, username in ipairs(playerList) do
+                if not toggleEnabled then break end
+
+                if not Players:FindFirstChild(username) then
+                    print("[Loop] Player left, skipping: " .. username)
+                    continue
+                end
+
+                print("[Loop] Processing player: " .. username)
+
+                fireScript1(username)
+                task.wait(1)
+                if not toggleEnabled then break end
+
+                fireScript2(username)
+                task.wait(1)
+                if not toggleEnabled then break end
+            end
+        end
+        print("[Loop] Stopped")
+    end)
+end
+
+local function stopLoop()
+    toggleEnabled = false
+    if loopThread then
+        task.cancel(loopThread)
+        loopThread = nil
+    end
+    print("[Loop] Toggle disabled, loop stopped")
+end
+
+Players.PlayerAdded:Connect(function(player)
+    if player ~= Players.LocalPlayer then
+        print("[Event] Player joined: " .. player.Name)
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    print("[Event] Player left: " .. player.Name)
+end)
+
+Family:AddToggle({
+    Name = "Bring all using piggyback request",
+    Default = false,
+    Callback = function(v)
+        toggleEnabled = v
+        if v then
+            startLoop()
+        else
+            stopLoop()
+        end
+    end
+})
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local RE = ReplicatedStorage:WaitForChild("RE"):WaitForChild("1Playe1rTrigge1rEven1t")
+local toggleEnabled = false
+local loopThread = nil
+local CARRY_POS = Vector3.new(105, -31, -151)
+
+local function getOriginalPos()
+    local char = Players.LocalPlayer.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        return char.HumanoidRootPart.CFrame
+    end
+    return nil
+end
+
+local function teleportTo(cframe)
+    local char = Players.LocalPlayer.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        char.HumanoidRootPart.CFrame = cframe
+    end
+end
+
+local function getPlayerList()
+    local list = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= Players.LocalPlayer then
+            table.insert(list, player.Name)
+        end
+    end
+    return list
+end
+
+local function fireScript1(username)
+    local player = Players:FindFirstChild(username)
+    if player then
+        RE:FireServer(unpack({
+            "Client2Client",
+            "Request: Carry!",
+            player
+        }))
+        print("[Script 1] Carry fired for: " .. username)
+    end
+end
+
+local function fireScript2(username)
+    local player = Players:FindFirstChild(username)
+    if player then
+        RE:FireServer(unpack({
+            "DropButtonStopAll",
+            player
+        }))
+        print("[Script 2] Drop fired for: " .. username)
+    end
+end
+
+local function startLoop()
+    loopThread = task.spawn(function()
+        print("[Loop] Started")
+        while toggleEnabled do
+            local playerList = getPlayerList()
+
+            if #playerList == 0 then
+                print("[Loop] No players found, waiting...")
+                task.wait(1)
+                continue
+            end
+
+            for _, username in ipairs(playerList) do
+                if not toggleEnabled then break end
+
+                if not Players:FindFirstChild(username) then
+                    print("[Loop] Player left, skipping: " .. username)
+                    continue
+                end
+
+                print("[Loop] Processing player: " .. username)
+
+                local originalCFrame = getOriginalPos()
+                if not originalCFrame then
+                    print("[Loop] Character not found, skipping: " .. username)
+                    continue
+                end
+
+                fireScript1(username)
+                task.wait(1)
+                if not toggleEnabled then break end
+
+                teleportTo(CFrame.new(CARRY_POS))
+                print("[Teleport] Moved to carry position: " .. tostring(CARRY_POS))
+                task.wait(1)
+                if not toggleEnabled then break end
+
+                fireScript2(username)
+                task.wait(1)
+                if not toggleEnabled then break end
+
+                teleportTo(originalCFrame)
+                print("[Teleport] Returned to original position")
+                task.wait(1)
+                if not toggleEnabled then break end
+            end
+        end
+        print("[Loop] Stopped")
+    end)
+end
+
+local function stopLoop()
+    toggleEnabled = false
+    if loopThread then
+        task.cancel(loopThread)
+        loopThread = nil
+    end
+    print("[Loop] Toggle disabled, loop stopped")
+end
+
+Players.PlayerAdded:Connect(function(player)
+    if player ~= Players.LocalPlayer then
+        print("[Event] Player joined: " .. player.Name)
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    print("[Event] Player left: " .. player.Name)
+end)
+
+Family:AddToggle({
+    Name = "kill all using carry",
+    Default = false,
+    Callback = function(v)
+        toggleEnabled = v
+        if v then
+            startLoop()
+        else
+            stopLoop()
+        end
+    end
+})
