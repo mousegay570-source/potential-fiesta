@@ -9307,12 +9307,11 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RE = ReplicatedStorage:WaitForChild("RE"):WaitForChild("1Playe1rTrigge1rEven1t")
 
-local interval = 4 -- detik ganti pemain
+local interval = 4
 local isRunning = false
 local loopThread = nil
 local playerIndex = 1
 
--- Fungsi ambil daftar pemain (exclude local player)
 local function getPlayerList()
     local list = {}
     local localPlayer = Players.LocalPlayer
@@ -9324,26 +9323,34 @@ local function getPlayerList()
     return list
 end
 
--- Fungsi jalankan Script 1
-local function fireScript1(username)
-    local args = {
-        "Client2Client",
-        "Request: Piggyback!",
-        Players:WaitForChild(username)
-    }
-    RE:FireServer(unpack(args))
+-- Pakai FindFirstChild bukan WaitForChild supaya tidak nil error
+local function fireScript1(player)
+    local success, err = pcall(function()
+        local args = {
+            "Client2Client",
+            "Request: Piggyback!",
+            player
+        }
+        RE:FireServer(unpack(args))
+    end)
+    if not success then
+        print("[Script1] Error: " .. tostring(err))
+    end
 end
 
--- Fungsi jalankan Script 2
-local function fireScript2(username)
-    local args = {
-        "DropButtonStopAll",
-        Players:WaitForChild(username)
-    }
-    RE:FireServer(unpack(args))
+local function fireScript2(player)
+    local success, err = pcall(function()
+        local args = {
+            "DropButtonStopAll",
+            player
+        }
+        RE:FireServer(unpack(args))
+    end)
+    if not success then
+        print("[Script2] Error: " .. tostring(err))
+    end
 end
 
--- Loop utama
 local function startLoop()
     isRunning = true
     playerIndex = 1
@@ -9353,29 +9360,28 @@ local function startLoop()
             local playerList = getPlayerList()
 
             if #playerList == 0 then
+                print("[Loop] No players found, waiting...")
                 task.wait(1)
                 continue
             end
 
-            -- Reset index kalau melebihi jumlah pemain
             if playerIndex > #playerList then
                 playerIndex = 1
             end
 
             local targetPlayer = playerList[playerIndex]
 
-            if targetPlayer and targetPlayer.Parent then
-                local username = targetPlayer.Name
-                print("[Loop] Current target: " .. username)
-
-                fireScript1(username)
+            -- Cek player masih valid sebelum fire
+            if targetPlayer and targetPlayer.Parent ~= nil then
+                print("[Loop] Current target: " .. targetPlayer.Name)
+                fireScript1(targetPlayer)
                 task.wait(0.2)
-                fireScript2(username)
+                fireScript2(targetPlayer)
+            else
+                print("[Loop] Target invalid, skipping...")
             end
 
-            -- Tunggu 4 detik lalu pindah ke pemain berikutnya
             task.wait(interval)
-
             playerIndex = playerIndex + 1
         end
     end)
@@ -9391,7 +9397,6 @@ local function stopLoop()
     print("[Loop] Stopped.")
 end
 
--- Auto update: kalau player leave, index menyesuaikan otomatis
 Players.PlayerRemoving:Connect(function(player)
     local list = getPlayerList()
     if playerIndex > #list then
@@ -9400,12 +9405,10 @@ Players.PlayerRemoving:Connect(function(player)
     print("[Info] " .. player.Name .. " left, index has been reset.")
 end)
 
--- Player join langsung masuk rotasi (karena getPlayerList() dipanggil tiap iterasi)
 Players.PlayerAdded:Connect(function(player)
     print("[Info] " .. player.Name .. " joined, automatically added to rotation.")
 end)
 
--- Toggle UI
 Family:AddToggle({
     Name = "Piggyback bring all",
     Default = false,
