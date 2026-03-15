@@ -9302,123 +9302,52 @@ Family:AddToggle({
     end
 })
 
--- Konfigurasi
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RE = ReplicatedStorage:WaitForChild("RE"):WaitForChild("1Playe1rTrigge1rEven1t")
 
-local interval = 4
-local isRunning = false
-local loopThread = nil
-local playerIndex = 1
-
-local function getPlayerList()
-    local list = {}
-    local localPlayer = Players.LocalPlayer
-    for _, player in ipairs(Players:GetPlayers()) do
-        if player ~= localPlayer then
-            table.insert(list, player)
-        end
-    end
-    return list
-end
-
--- Pakai FindFirstChild bukan WaitForChild supaya tidak nil error
-local function fireScript1(player)
-    local success, err = pcall(function()
-        local args = {
-            "Client2Client",
-            "Request: Piggyback!",
-            player
-        }
-        RE:FireServer(unpack(args))
-    end)
-    if not success then
-        print("[Script1] Error: " .. tostring(err))
-    end
-end
-
-local function fireScript2(player)
-    local success, err = pcall(function()
-        local args = {
-            "DropButtonStopAll",
-            player
-        }
-        RE:FireServer(unpack(args))
-    end)
-    if not success then
-        print("[Script2] Error: " .. tostring(err))
-    end
-end
-
-local function startLoop()
-    isRunning = true
-    playerIndex = 1
-
-    loopThread = task.spawn(function()
-        while isRunning do
-            local playerList = getPlayerList()
-
-            if #playerList == 0 then
-                print("[Loop] No players found, waiting...")
-                task.wait(1)
-                continue
-            end
-
-            if playerIndex > #playerList then
-                playerIndex = 1
-            end
-
-            local targetPlayer = playerList[playerIndex]
-
-            -- Cek player masih valid sebelum fire
-            if targetPlayer and targetPlayer.Parent ~= nil then
-                print("[Loop] Current target: " .. targetPlayer.Name)
-                fireScript1(targetPlayer)
-                task.wait(0.2)
-                fireScript2(targetPlayer)
-            else
-                print("[Loop] Target invalid, skipping...")
-            end
-
-            task.wait(interval)
-            playerIndex = playerIndex + 1
-        end
-    end)
-end
-
-local function stopLoop()
-    isRunning = false
-    if loopThread then
-        task.cancel(loopThread)
-        loopThread = nil
-    end
-    playerIndex = 1
-    print("[Loop] Stopped.")
-end
-
-Players.PlayerRemoving:Connect(function(player)
-    local list = getPlayerList()
-    if playerIndex > #list then
-        playerIndex = 1
-    end
-    print("[Info] " .. player.Name .. " left, index has been reset.")
-end)
-
-Players.PlayerAdded:Connect(function(player)
-    print("[Info] " .. player.Name .. " joined, automatically added to rotation.")
-end)
+local running = false
 
 Family:AddToggle({
     Name = "Piggyback bring all",
     Default = false,
     Callback = function(v)
+        running = v
+        
         if v then
-            print("[Toggle] ON - Loop started")
-            startLoop()
-        else
-            print("[Toggle] OFF - Loop stopped")
-            stopLoop()
+            task.spawn(function()
+                while running do
+                    for _,plr in pairs(Players:GetPlayers()) do
+                        if not running then break end
+                        if plr ~= Players.LocalPlayer then
+                            
+                            -- Script 1
+                            local args1 = {
+                                "Client2Client",
+                                "Request: Piggyback!",
+                                plr
+                            }
+
+                            ReplicatedStorage:WaitForChild("RE")
+                                :WaitForChild("1Playe1rTrigge1rEven1t")
+                                :FireServer(unpack(args1))
+
+                            task.wait(2)
+
+                            -- Script 2
+                            local args2 = {
+                                "DropButtonStopAll",
+                                plr
+                            }
+
+                            ReplicatedStorage:WaitForChild("RE")
+                                :WaitForChild("1Playe1rTrigge1rEven1t")
+                                :FireServer(unpack(args2))
+
+                            task.wait(4)
+                        end
+                    end
+                end
+            end)
         end
     end
 })
