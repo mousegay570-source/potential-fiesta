@@ -2,7 +2,7 @@ local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/minhd
 
 local Window = redzlib:MakeWindow({
   Title = "Xavier Hub         Brookhaven RP           [ Normal ]",
-  SubTitle = "by AstraX",
+  SubTitle = "by Ricky",
   SaveFolder = "goXpp.lua"
 })
 Window:AddMinimizeButton({
@@ -27,7 +27,7 @@ local Paragraph = Tab1:AddParagraph({"Collaboration", "see more"})
 
   local Dialog = Window:Dialog({
     Title = "join discord for feedback",
-    Text = "idk just igrone",
+    Text = "Join my discord server for suggestion updates and bug report",
     Options = {
       {"Confirm", function()
        
@@ -9170,21 +9170,33 @@ task.spawn(function()
     end
 end)
 
-
 local toggle = false
 
 local RS = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local lp = Players.LocalPlayer
-local char = lp.Character or lp.CharacterAdded:Wait()
-local hrp = char:WaitForChild("HumanoidRootPart")
+
+local function getHRP()
+    local char = lp.Character or lp.CharacterAdded:Wait()
+    return char:WaitForChild("HumanoidRootPart")
+end
 
 local function clearTools()
     RS:WaitForChild("RE"):WaitForChild("1Clea1rTool1s"):FireServer("ClearAllTools")
 end
 
 local function pickTool()
+    task.wait(0.5)
     RS:WaitForChild("RE"):WaitForChild("1Too1l"):InvokeServer("PickingTools", "ShoppingCart")
+    task.wait(0.5)
+end
+
+local function equipTool()
+    local char = lp.Character or lp.CharacterAdded:Wait()
+    local tool = lp.Backpack:FindFirstChildOfClass("Tool") or char:FindFirstChildOfClass("Tool")
+    if tool then
+        lp.Character.Humanoid:EquipTool(tool)
+    end
 end
 
 local function getRandomPlayer()
@@ -9204,13 +9216,18 @@ local loopThread = nil
 local function startLoop()
     loopThread = task.spawn(function()
         while toggle do
+            local hrp = getHRP()
             originalCFrame = hrp.CFrame
 
+            -- Script 1: Clear tools
             clearTools()
             task.wait(1)
             if not toggle then break end
 
+            -- Script 2: Pick tool + equip
             pickTool()
+            equipTool()
+            if not toggle then break end
 
             local targetPlayer = getRandomPlayer()
             if targetPlayer then
@@ -9224,6 +9241,7 @@ local function startLoop()
                     elapsed = elapsed + dt
                     angle = angle + math.rad(12)
 
+                    local hrp = getHRP()
                     local targetPos = targetHRP.CFrame.Position
                     local floatOffset = Vector3.new(0, 5, 0)
                     local orbitRadius = 2.5
@@ -9240,26 +9258,34 @@ local function startLoop()
             end
             if not toggle then break end
 
+            -- Teleport ke posisi -45, -53, 88
+            local hrp = getHRP()
             hrp.CFrame = CFrame.new(-45, -53, 88)
             task.wait(0.5)
             if not toggle then break end
 
+            -- Script 3: Clear tools pas di posisi teleport
+            clearTools()
+            task.wait(0.5)
+            if not toggle then break end
+
+            -- Teleport balik ke posisi semula
             if originalCFrame then
+                local hrp = getHRP()
                 hrp.CFrame = originalCFrame
             end
             task.wait(0.5)
             if not toggle then break end
 
-            clearTools()
-            task.wait(0.5)
-            if not toggle then break end
-
+            -- Script 4: Pick tool + equip lagi (loop ulang)
             pickTool()
+            equipTool()
             task.wait(1)
         end
     end)
 end
 
+-- Toggle UI
 Family:AddToggle({
     Name = "kill all using shoppingCart",
     Default = false,
@@ -9272,6 +9298,124 @@ Family:AddToggle({
                 task.cancel(loopThread)
                 loopThread = nil
             end
+        end
+    end
+})
+
+-- Konfigurasi
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RE = ReplicatedStorage:WaitForChild("RE"):WaitForChild("1Playe1rTrigge1rEven1t")
+
+local interval = 4 -- detik ganti pemain
+local isRunning = false
+local loopThread = nil
+local playerIndex = 1
+
+-- Fungsi ambil daftar pemain (exclude local player)
+local function getPlayerList()
+    local list = {}
+    local localPlayer = Players.LocalPlayer
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= localPlayer then
+            table.insert(list, player)
+        end
+    end
+    return list
+end
+
+-- Fungsi jalankan Script 1
+local function fireScript1(username)
+    local args = {
+        "Client2Client",
+        "Request: Piggyback!",
+        Players:WaitForChild(username)
+    }
+    RE:FireServer(unpack(args))
+end
+
+-- Fungsi jalankan Script 2
+local function fireScript2(username)
+    local args = {
+        "DropButtonStopAll",
+        Players:WaitForChild(username)
+    }
+    RE:FireServer(unpack(args))
+end
+
+-- Loop utama
+local function startLoop()
+    isRunning = true
+    playerIndex = 1
+
+    loopThread = task.spawn(function()
+        while isRunning do
+            local playerList = getPlayerList()
+
+            if #playerList == 0 then
+                task.wait(1)
+                continue
+            end
+
+            -- Reset index kalau melebihi jumlah pemain
+            if playerIndex > #playerList then
+                playerIndex = 1
+            end
+
+            local targetPlayer = playerList[playerIndex]
+
+            if targetPlayer and targetPlayer.Parent then
+                local username = targetPlayer.Name
+                print("[Loop] Current target: " .. username)
+
+                fireScript1(username)
+                task.wait(0.2)
+                fireScript2(username)
+            end
+
+            -- Tunggu 4 detik lalu pindah ke pemain berikutnya
+            task.wait(interval)
+
+            playerIndex = playerIndex + 1
+        end
+    end)
+end
+
+local function stopLoop()
+    isRunning = false
+    if loopThread then
+        task.cancel(loopThread)
+        loopThread = nil
+    end
+    playerIndex = 1
+    print("[Loop] Stopped.")
+end
+
+-- Auto update: kalau player leave, index menyesuaikan otomatis
+Players.PlayerRemoving:Connect(function(player)
+    local list = getPlayerList()
+    if playerIndex > #list then
+        playerIndex = 1
+    end
+    print("[Info] " .. player.Name .. " left, index has been reset.")
+end)
+
+-- Player join langsung masuk rotasi (karena getPlayerList() dipanggil tiap iterasi)
+Players.PlayerAdded:Connect(function(player)
+    print("[Info] " .. player.Name .. " joined, automatically added to rotation.")
+end)
+
+-- Toggle UI
+Family:AddToggle({
+    Name = "Piggyback bring all",
+    Default = false,
+    Callback = function(v)
+        if v then
+            print("[Toggle] ON - Loop started")
+            startLoop()
+        else
+            print("[Toggle] OFF - Loop stopped")
+            stopLoop()
         end
     end
 })
