@@ -9193,14 +9193,14 @@ local function getPlayerList()
     return list
 end
 
--- Fire Script 1 (Piggyback) -- FIXED: pakai Players:FindFirstChild bukan WaitForChild
+-- Fire Script 1 (Piggyback)
 local function fireScript1(username)
     local player = Players:FindFirstChild(username)
     if player then
         RE:FireServer(
             "Client2Client",
             "Request: Piggyback!",
-            player -- langsung pass player object
+            player
         )
         print("[Script 1] Piggyback fired for: " .. username)
     else
@@ -9208,13 +9208,13 @@ local function fireScript1(username)
     end
 end
 
--- Fire Script 2 (Drop) -- FIXED: sama, pakai FindFirstChild
+-- Fire Script 2 (Drop)
 local function fireScript2(username)
     local player = Players:FindFirstChild(username)
     if player then
         RE:FireServer(
             "DropButtonStopAll",
-            player -- langsung pass player object
+            player
         )
         print("[Script 2] Drop fired for: " .. username)
     else
@@ -9262,7 +9262,7 @@ local function startLoop()
 
                 -- Step 2: Fire Drop
                 fireScript2(username)
-                task.wait(1)
+                task.wait(5)
                 if not toggleEnabled then break end
             end
         end
@@ -9301,6 +9301,111 @@ Family:AddToggle({
             startLoop()
         else
             stopLoop()
+        end
+    end
+})
+
+local toggle = false
+
+local RS = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+local char = lp.Character or lp.CharacterAdded:Wait()
+local hrp = char:WaitForChild("HumanoidRootPart")
+
+local function clearTools()
+    RS:WaitForChild("RE"):WaitForChild("1Clea1rTool1s"):FireServer("ClearAllTools")
+end
+
+local function pickTool()
+    RS:WaitForChild("RE"):WaitForChild("1Too1l"):InvokeServer("PickingTools", "ShoppingCart")
+end
+
+local function getRandomPlayer()
+    local playerList = {}
+    for _, p in pairs(Players:GetPlayers()) do
+        if p ~= lp and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+            table.insert(playerList, p)
+        end
+    end
+    if #playerList == 0 then return nil end
+    return playerList[math.random(1, #playerList)]
+end
+
+local originalCFrame
+local loopThread = nil
+
+local function startLoop()
+    loopThread = task.spawn(function()
+        while toggle do
+            originalCFrame = hrp.CFrame
+
+            clearTools()
+            task.wait(1)
+            if not toggle then break end
+
+            pickTool()
+
+            local targetPlayer = getRandomPlayer()
+            if targetPlayer then
+                local targetHRP = targetPlayer.Character.HumanoidRootPart
+                local elapsed = 0
+                local duration = 2
+                local angle = 0
+
+                while elapsed < duration and toggle do
+                    local dt = task.wait(0.03)
+                    elapsed = elapsed + dt
+                    angle = angle + math.rad(12)
+
+                    local targetPos = targetHRP.CFrame.Position
+                    local floatOffset = Vector3.new(0, 5, 0)
+                    local orbitRadius = 2.5
+                    local orbitX = math.cos(angle) * orbitRadius
+                    local orbitZ = math.sin(angle) * orbitRadius
+
+                    hrp.CFrame = CFrame.new(
+                        targetPos + floatOffset + Vector3.new(orbitX, 0, orbitZ),
+                        targetPos + floatOffset
+                    ) * CFrame.Angles(angle, 0, 0)
+                end
+            else
+                task.wait(2)
+            end
+            if not toggle then break end
+
+            hrp.CFrame = CFrame.new(-45, -53, 88)
+            task.wait(0.5)
+            if not toggle then break end
+
+            if originalCFrame then
+                hrp.CFrame = originalCFrame
+            end
+            task.wait(0.5)
+            if not toggle then break end
+
+            clearTools()
+            task.wait(0.5)
+            if not toggle then break end
+
+            pickTool()
+            task.wait(1)
+        end
+    end)
+end
+
+Family:AddToggle({
+    Name = "kill all using shoppingCart",
+    Default = false,
+    Callback = function(v)
+        toggle = v
+        if toggle then
+            startLoop()
+        else
+            if loopThread then
+                task.cancel(loopThread)
+                loopThread = nil
+            end
         end
     end
 })
