@@ -9308,8 +9308,12 @@ local RS = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local lp = Players.LocalPlayer
 
+local function getChar()
+    return lp.Character or lp.CharacterAdded:Wait()
+end
+
 local function getHRP()
-    local char = lp.Character or lp.CharacterAdded:Wait()
+    local char = getChar()
     return char:WaitForChild("HumanoidRootPart")
 end
 
@@ -9324,10 +9328,13 @@ local function pickTool()
 end
 
 local function equipTool()
-    local char = lp.Character or lp.CharacterAdded:Wait()
+    local char = getChar()
+    if not char then return end
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return end
     local tool = lp.Backpack:FindFirstChildOfClass("Tool") or char:FindFirstChildOfClass("Tool")
     if tool then
-        lp.Character.Humanoid:EquipTool(tool)
+        humanoid:EquipTool(tool)
     end
 end
 
@@ -9349,6 +9356,7 @@ local function startLoop()
     loopThread = task.spawn(function()
         while toggle do
             local hrp = getHRP()
+            if not hrp then task.wait(1) continue end
             originalCFrame = hrp.CFrame
 
             -- Script 1: Clear tools
@@ -9362,7 +9370,7 @@ local function startLoop()
             if not toggle then break end
 
             local targetPlayer = getRandomPlayer()
-            if targetPlayer then
+            if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
                 local targetHRP = targetPlayer.Character.HumanoidRootPart
                 local elapsed = 0
                 local duration = 2
@@ -9371,9 +9379,12 @@ local function startLoop()
                 while elapsed < duration and toggle do
                     local dt = task.wait(0.03)
                     elapsed = elapsed + dt
-                    angle = angle + math.rad(67)
+                    angle = angle + math.rad(12)
 
                     local hrp = getHRP()
+                    if not hrp then break end
+                    if not targetHRP or not targetHRP.Parent then break end
+
                     local targetPos = targetHRP.CFrame.Position
                     local floatOffset = Vector3.new(0, 5, 0)
                     local orbitRadius = 2.5
@@ -9396,14 +9407,14 @@ local function startLoop()
             if not toggle then break end
 
             -- Teleport balik ke posisi semula
-            if originalCFrame then
-                local hrp = getHRP()
+            local hrp = getHRP()
+            if hrp and originalCFrame then
                 hrp.CFrame = originalCFrame
             end
             task.wait(0.5)
             if not toggle then break end
 
-            -- Script 4: Pick tool + equip lagi (loop ulang)
+            -- Script 4: Pick tool + equip lagi
             pickTool()
             equipTool()
             task.wait(1)
