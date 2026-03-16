@@ -9302,139 +9302,58 @@ Family:AddToggle({
     end
 })
 
-local toggle = false
-
-local RS = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
-local lp = Players.LocalPlayer
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer -- Mendeteksi kamu sendiri
+local Remote = ReplicatedStorage:WaitForChild("RE"):WaitForChild("1Playe1rTrigge1rEven1t")
 
-local function getChar()
-    return lp.Character or lp.CharacterAdded:Wait()
-end
+local isRunning = false
 
-local function getHRP()
-    local char = getChar()
-    return char:WaitForChild("HumanoidRootPart")
-end
-
-local function clearTools()
-    RS:WaitForChild("RE"):WaitForChild("1Clea1rTool1s"):FireServer("ClearAllTools")
-end
-
-local function pickTool()
-    task.wait(0.5)
-    RS:WaitForChild("RE"):WaitForChild("1Too1l"):InvokeServer("PickingTools", "ShoppingCart")
-    task.wait(0.5)
-end
-
-local function equipTool()
-    local char = getChar()
-    if not char then return end
-    local humanoid = char:FindFirstChildOfClass("Humanoid")
-    if not humanoid then return end
-    local tool = lp.Backpack:FindFirstChildOfClass("Tool") or char:FindFirstChildOfClass("Tool")
-    if tool then
-        humanoid:EquipTool(tool)
-    end
-end
-
-local function getRandomPlayer()
-    local playerList = {}
-    for _, p in pairs(Players:GetPlayers()) do
-        if p ~= lp and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-            table.insert(playerList, p)
-        end
-    end
-    if #playerList == 0 then return nil end
-    return playerList[math.random(1, #playerList)]
-end
-
-local originalCFrame
-local loopThread = nil
-
-local function startLoop()
-    loopThread = task.spawn(function()
-        while toggle do
-            local hrp = getHRP()
-            if not hrp then task.wait(1) continue end
-            originalCFrame = hrp.CFrame
-
-            -- Script 1: Clear tools
-            clearTools()
-            task.wait(1)
-            if not toggle then break end
-
-            -- Script 2: Pick tool + equip
-            pickTool()
-            equipTool()
-            if not toggle then break end
-
-            local targetPlayer = getRandomPlayer()
-            if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                local targetHRP = targetPlayer.Character.HumanoidRootPart
-                local elapsed = 0
-                local duration = 2
-                local angle = 0
-
-                while elapsed < duration and toggle do
-                    local dt = task.wait(0.03)
-                    elapsed = elapsed + dt
-                    angle = angle + math.rad(12)
-
-                    local hrp = getHRP()
-                    if not hrp then break end
-                    if not targetHRP or not targetHRP.Parent then break end
-
-                    local targetPos = targetHRP.CFrame.Position
-                    local floatOffset = Vector3.new(0, 5, 0)
-                    local orbitRadius = 2.5
-                    local orbitX = math.cos(angle) * orbitRadius
-                    local orbitZ = math.sin(angle) * orbitRadius
-
-                    hrp.CFrame = CFrame.new(
-                        targetPos + floatOffset + Vector3.new(orbitX, 0, orbitZ),
-                        targetPos + floatOffset
-                    ) * CFrame.Angles(angle, 0, 0)
-                end
-            else
-                task.wait(2)
-            end
-            if not toggle then break end
-
-            -- Script 3: Clear tools
-            clearTools()
-            task.wait(0.5)
-            if not toggle then break end
-
-            -- Teleport balik ke posisi semula
-            local hrp = getHRP()
-            if hrp and originalCFrame then
-                hrp.CFrame = originalCFrame
-            end
-            task.wait(0.5)
-            if not toggle then break end
-
-            -- Script 4: Pick tool + equip lagi
-            pickTool()
-            equipTool()
-            task.wait(1)
-        end
-    end)
-end
-
--- Toggle UI
 Family:AddToggle({
-    Name = "Bring all using shoppingCart",
+    Name = "bring all",
     Default = false,
     Callback = function(v)
-        toggle = v
-        if toggle then
-            startLoop()
-        else
-            if loopThread then
-                task.cancel(loopThread)
-                loopThread = nil
+        isRunning = v
+        
+        task.spawn(function()
+            while isRunning do
+                local allPlayers = Players:GetPlayers()
+                
+                for _, targetPlayer in ipairs(allPlayers) do
+                    -- CEK: Jika toggle dimatikan, langsung berhenti
+                    if not isRunning then break end
+                    
+                    -- WHITELIST: Lewati jika target adalah kamu sendiri
+                    if targetPlayer == LocalPlayer then 
+                        continue 
+                    end
+                    
+                    -- Pastikan pemain masih ada di server
+                    if targetPlayer and targetPlayer.Parent then
+                        
+                        -- Script 1: Client2Client
+                        local args1 = {
+                            "Client2Client",
+                            "Request: Piggyback!",
+                            targetPlayer -- Otomatis mengambil pemain yang sedang di-loop
+                        }
+                        Remote:FireServer(unpack(args1))
+                        
+                        -- Script 2: DropButtonStopAll
+                        local args2 = {
+                            "DropButtonStopAll",
+                            targetPlayer
+                        }
+                        Remote:FireServer(unpack(args2))
+                        
+                        -- Tunggu 4 detik sebelum ganti ke pemain berikutnya
+                        task.wait(4)
+                    end
+                end
+                
+                -- Jeda sebentar sebelum mulai loop dari awal daftar pemain lagi
+                task.wait(1) 
             end
-        end
+        end)
     end
 })
