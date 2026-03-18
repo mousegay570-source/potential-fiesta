@@ -9172,59 +9172,6 @@ task.spawn(function()
     end
 end)
 
-local Players = game:GetService("Players")
-local RE = game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Playe1rTrigge1rEven1t")
-local LocalPlayer = Players.LocalPlayer
-
-local toggleEnabled = false
-local loopThread = nil
-
-local function getRandomPlayer()
-    local list = {}
-    for _, p in ipairs(Players:GetPlayers()) do
-        if p ~= LocalPlayer then
-            table.insert(list, p)
-        end
-    end
-    if #list == 0 then return nil end
-    return list[math.random(1, #list)]
-end
-
-local function mainLoop()
-    while toggleEnabled do
-        local target = getRandomPlayer()
-
-        if target then
-            local playerInstance = Players:FindFirstChild(target.Name)
-            if playerInstance then
-                RE:FireServer("ToolGiveToServer", playerInstance, "NuclearBarrel")
-                print("Gave NuclearBarrel to: " .. target.Name)
-            end
-        else
-            print("nothing")
-        end
-
-        task.wait(1)
-    end
-end
-
-Family:AddToggle({
-    Name = "Give item to all player",
-    Default = false,
-    Callback = function(v)
-        toggleEnabled = v
-        if v then
-            loopThread = task.spawn(mainLoop)
-        else
-            if loopThread then
-                task.cancel(loopThread)
-                loopThread = nil
-            end
-            print("Toggle off")
-        end
-    end
-})
-
 local Section = Family:AddSection({"Kill player"})
 
 local toggle = false
