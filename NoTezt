@@ -9065,6 +9065,8 @@ protect:AddToggle({
 
 local Family= Window:MakeTab({"More", "rocket"})
 
+local Section = Tab1:AddSection({"Troll player"})
+
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -9170,6 +9172,61 @@ task.spawn(function()
     end
 end)
 
+local Players = game:GetService("Players")
+local RE = game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Playe1rTrigge1rEven1t")
+local LocalPlayer = Players.LocalPlayer
+
+local toggleEnabled = false
+local loopThread = nil
+
+local function getRandomPlayer()
+    local list = {}
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer then
+            table.insert(list, p)
+        end
+    end
+    if #list == 0 then return nil end
+    return list[math.random(1, #list)]
+end
+
+local function mainLoop()
+    while toggleEnabled do
+        local target = getRandomPlayer()
+
+        if target then
+            local playerInstance = Players:FindFirstChild(target.Name)
+            if playerInstance then
+                RE:FireServer("ToolGiveToServer", playerInstance, "NuclearBarrel")
+                print("Gave NuclearBarrel to: " .. target.Name)
+            end
+        else
+            print("nothing")
+        end
+
+        task.wait(1)
+    end
+end
+
+Family:AddToggle({
+    Name = "Give item to all player",
+    Default = false,
+    Callback = function(v)
+        toggleEnabled = v
+        if v then
+            loopThread = task.spawn(mainLoop)
+        else
+            if loopThread then
+                task.cancel(loopThread)
+                loopThread = nil
+            end
+            print("Toggle off")
+        end
+    end
+})
+
+local Section = Family:AddSection({"Kill player"})
+
 local toggle = false
 
 local RS = game:GetService("ReplicatedStorage")
@@ -9254,14 +9311,14 @@ local function startLoop()
                     ) * CFrame.Angles(angle, 0, 0)
                 end
             else
-                task.wait(2)
+                task.wait(3)
             end
             if not toggle then break end
 
             -- Teleport ke posisi -45, -53, 88
             local hrp = getHRP()
             hrp.CFrame = CFrame.new(92, -191, 9422)
-            task.wait(0.5)
+            task.wait(0.7)
             if not toggle then break end
 
             -- Script 3: Clear tools pas di posisi teleport
@@ -9355,5 +9412,110 @@ Family:AddToggle({
                 task.wait(1) 
             end
         end)
+    end
+})
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local RE = game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1NoMoto1rVehicle1s")
+
+local LocalPlayer = Players.LocalPlayer
+local toggleEnabled = false
+local loopThread = nil
+
+local function getNextPlayers()
+    local list = {}
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer then
+            table.insert(list, p)
+        end
+    end
+    return list
+end
+
+local function teleportToTarget(target)
+    local char = LocalPlayer.Character
+    if not char then return end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+
+    local targetChar = target.Character
+    if not targetChar then return end
+    local targetHRP = targetChar:FindFirstChild("HumanoidRootPart")
+    if not targetHRP then return end
+
+    local startTime = tick()
+    local conn
+    conn = RunService.Heartbeat:Connect(function()
+        if not toggleEnabled or tick() - startTime >= 2 then
+            conn:Disconnect()
+            return
+        end
+
+        local targetChar2 = target.Character
+        if not targetChar2 then conn:Disconnect() return end
+        local tHRP = targetChar2:FindFirstChild("HumanoidRootPart")
+        if not tHRP then conn:Disconnect() return end
+
+        local offset = Vector3.new(0, 5, 0)
+        local facingDown = CFrame.new(tHRP.Position + offset) * CFrame.Angles(math.rad(90), 0, 0)
+        hrp.CFrame = facingDown
+    end)
+
+    task.wait(2)
+    if conn then conn:Disconnect() end
+end
+
+local function mainLoop()
+    while toggleEnabled do
+        local playerList = getNextPlayers()
+
+        if #playerList == 0 then
+            task.wait(1)
+        else
+            for _, target in ipairs(playerList) do
+                if not toggleEnabled then break end
+
+                teleportToTarget(target)
+
+                if not toggleEnabled then break end
+
+                RE:FireServer("CargoBike")
+                task.wait(1)
+
+                if not toggleEnabled then break end
+
+                local char = LocalPlayer.Character
+                if char then
+                    local hrp = char:FindFirstChild("HumanoidRootPart")
+                    if hrp then
+                        hrp.CFrame = CFrame.new(7841, -43, -7097)
+                    end
+                end
+
+                task.wait(2)
+                if not toggleEnabled then break end
+
+                RE:FireServer("Delete NoMotorVehicle")
+
+                task.wait(1.5) 
+            end
+        end
+    end
+end
+
+Family:AddToggle({
+    Name = "kill all using CargoBike",
+    Default = false,
+    Callback = function(v)
+        toggleEnabled = v
+        if v then
+            loopThread = task.spawn(mainLoop)
+        else
+            if loopThread then
+                task.cancel(loopThread)
+                loopThread = nil
+            end
+        end
     end
 })
