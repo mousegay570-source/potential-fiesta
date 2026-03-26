@@ -1,4 +1,4 @@
-local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/minhdepzai-v/LibraryRobloc/refs/heads/main/RedzLibrary.lua"))()
+local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/dreamy9x9x/RedzLibrary/refs/heads/main/Redzhubui"))()
 
 local Window = redzlib:MakeWindow({
   Title = "Xavier Hub         Brookhaven RP           [ Normal ]",
@@ -4465,8 +4465,58 @@ updatePlayerList()
 
 local Ava = Window:MakeTab({"Avatar", "rbxassetid://10734952036"})
 
-local Section = Ava:AddSection({"Roupas 3D"})
+Ava:AddButton({
+    Name = "Reset avatar",
+    Callback = function()
+    
+   game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ResetCharacterAppearance"):FireServer()
+   
+   end
+})
 
+local Section = Ava:AddSection({"glitch (OP)"})
+
+Ava:AddButton({
+    Name = "Fake white car (use shiftlock)",
+    Callback = function()
+
+local args = {
+	108329512914393
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Wear"):InvokeServer(unpack(args))
+   
+task.wait(2)
+
+local args = {
+	754637456
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Wear"):InvokeServer(unpack(args))
+   
+task.wait(2)
+
+local args = {
+	754637084
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Wear"):InvokeServer(unpack(args))
+   
+task.wait(2)
+
+ local args = {
+	754636298
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Wear"):InvokeServer(unpack(args))
+   
+ task.wait(2)
+ 
+   local args = {
+	754635032
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Wear"):InvokeServer(unpack(args))
+   
+   end
+})
+
+local Section = Ava:AddSection({"Avatar"})
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
