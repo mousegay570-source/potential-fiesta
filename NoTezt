@@ -9053,6 +9053,57 @@ end)
 
 local eva = Window:MakeTab({"Event", "rbxassetid://16776729560"})
 
+local toggle = false
+
+eva:AddToggle({
+    Name = "Auto collect egg streme",
+    Default = false,
+    Callback = function(v)
+        toggle = v
+
+        if toggle then
+            task.spawn(function()
+                local folder = workspace:WaitForChild("EggHunt_Eggstreme")
+                local index = 1
+
+                while toggle do
+                    local models = {}
+
+                    -- Ambil semua model terbaru
+                    for _, obj in pairs(folder:GetChildren()) do
+                        if obj:IsA("Model") then
+                            table.insert(models, obj)
+                        end
+                    end
+
+                    if #models > 0 then
+                        -- Reset index kalau melebihi jumlah
+                        if index > #models then
+                            index = 1
+                        end
+
+                        local model = models[index]
+
+                        local char = game.Players.LocalPlayer.Character
+                        if char and char:FindFirstChild("HumanoidRootPart") then
+                            
+                            local targetPart = model:FindFirstChild("HumanoidRootPart") 
+                                or model:FindFirstChildWhichIsA("BasePart")
+
+                            if targetPart then
+                                char.HumanoidRootPart.CFrame = targetPart.CFrame + Vector3.new(0, 3, 0)
+                            end
+                        end
+
+                        index += 1
+                    end
+
+                    task.wait(2) -- delay 2 detik tiap pindah
+                end
+            end)
+        end
+    end
+})
 
 local Family= Window:MakeTab({"More", "rocket"})
 
@@ -9166,7 +9217,7 @@ end)
 local antiSitConnection = nil
 local antiSitEnabled = false
 
-protect:AddToggle({
+Family:AddToggle({
     Name = "Anti-Sit",
     Description = "Impede o jogador de sentar",
     Default = false,
