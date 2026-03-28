@@ -1,4 +1,4 @@
-local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/dreamy9x9x/RedzLibrary/refs/heads/main/Redzhubui"))()
+local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/minhdepzai-v/LibraryRobloc/refs/heads/main/RedzLibrary.lua"))()
 
 local Window = redzlib:MakeWindow({
   Title = "Xavier Hub         Brookhaven RP           [ Normal ]",
@@ -9219,7 +9219,6 @@ local antiSitEnabled = false
 
 Family:AddToggle({
     Name = "Anti-Sit",
-    Description = "Impede o jogador de sentar",
     Default = false,
     Callback = function(state)
         antiSitEnabled = state
@@ -9462,38 +9461,5 @@ Family:AddToggle({
             end
         end)
     end
-})
-
-Family:AddButton({
-    Name = "set commercial (Xavier on top)",
-    Callback = function()
-  
-local targetPos = Vector3.new(-239, 90, -550)
-
-local function teleportPlayer(character)
-    if character and character:FindFirstChild("HumanoidRootPart") then
-        character.HumanoidRootPart.CFrame = CFrame.new(targetPos)
-    end
-end
-
-task.wait(0.5)
-
-local args = {
-	"CommercialBackGround",
-	3,
-	Color3.new(1, 0, 0.8120231628417969)
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Cemeter1y"):FireServer(unpack(args))
-
-task.wait(0.5)
-
-local args = {
-	"ReturningCommercialWords",
-	3,
-	[4] = "Xavier on top \240\159\142\137\240\159\146\150"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Cemeter1y"):FireServer(unpack(args))
-
-   end 
 })
 
