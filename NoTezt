@@ -9444,3 +9444,7 @@ game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Cemeter1y
 
    end 
 })
+
+local eva = Window:MakeTab({"event", "rbxassetid://16776729560"})
+
+local Paragraph = eva:AddParagraph({"testing example", "rbxassetid://16776729560"})
