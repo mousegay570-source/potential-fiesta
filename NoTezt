@@ -9053,8 +9053,6 @@ end)
 
 local eva = Window:MakeTab({"Event", "rbxassetid://16776729560"})
 
-local Paragraph = eva:AddParagraph({"testing example", "rbxassetid://16776729560"})
-
 local Section = eva:AddSection({"egg hunt"})
 
 local Players = game:GetService("Players")
@@ -9096,79 +9094,6 @@ eva:AddToggle({
                         if not toggleEnabled then break end
 
                         -- Cari posisi target
-                        local targetPos
-                        if target:IsA("Model") then
-                            local hrp = target:FindFirstChild("HumanoidRootPart")
-                            local primary = target.PrimaryPart
-                            if hrp then
-                                targetPos = hrp.Position
-                            elseif primary then
-                                targetPos = primary.Position
-                            else
-                                local part = target:FindFirstChildWhichIsA("BasePart")
-                                if part then targetPos = part.Position end
-                            end
-                        elseif target:IsA("BasePart") then
-                            targetPos = target.Position
-                        end
-
-                        if targetPos then
-                            local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-                            local hrp = char:WaitForChild("HumanoidRootPart", 5)
-                            if hrp then
-                                hrp.CFrame = CFrame.new(targetPos + Vector3.new(0, 3, 0))
-                            end
-                        end
-
-                        task.wait(0.5)
-                    end
-                end
-            end)
-        else
-            if loopThread then
-                task.cancel(loopThread)
-                loopThread = nil
-            end
-        end
-    end
-})
-
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
-local toggleEnabled = false
-local loopThread = nil
-
-local folder = workspace:WaitForChild("EggHunt_Hard")
-
-eva:AddToggle({
-    Name = "auto collect egg hard",
-    Default = false,
-    Callback = function(v)
-        toggleEnabled = v
-
-        if toggleEnabled then
-            loopThread = task.spawn(function()
-                while toggleEnabled do
-                    local models = {}
-                    for _, child in ipairs(folder:GetChildren()) do
-                        if child:IsA("Model") or child:IsA("BasePart") or child:IsA("Folder") then
-                            for _, inner in ipairs(child:GetChildren()) do
-                                if inner:IsA("Model") or inner:IsA("BasePart") then
-                                    table.insert(models, inner)
-                                end
-                            end
-                        end
-                    end
-
-                    if #models == 0 then
-                        task.wait(1)
-                        continue
-                    end
-
-                    for _, target in ipairs(models) do
-                        if not toggleEnabled then break end
-
                         local targetPos
                         if target:IsA("Model") then
                             local hrp = target:FindFirstChild("HumanoidRootPart")
