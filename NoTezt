@@ -9444,10 +9444,3 @@ game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Cemeter1y
 
    end 
 })
-
-local huntnow = Window:MakeTab({"Event", "thumb"})
-
-local Section = huntnow:AddSection({"Egg hunt"})
-
-
-local Section = huntnow:AddSection({"coming soon"})
