@@ -9053,100 +9053,14 @@ end)
 
 local eva = Window:MakeTab({"Event", "rbxassetid://16776729560"})
 
-local toggle = false
-
-local isTeleporting = false
-
-eva:AddToggle({
-    Name = "Auto collect egg streme",
-    Default = false,
-    Callback = function(v)
-        isTeleporting = v
-        
-        if isTeleporting then
-            task.spawn(function()
-                while isTeleporting do
-                    local folder = workspace:FindFirstChild("EggHunt_Eggstreme")
-                    
-                    if folder then
-                        local items = folder:GetChildren()
-                        
-                        for _, item in pairs(items) do
-                            if not isTeleporting then break end
-                            
-                            local targetPart = item:IsA("BasePart") and item or item:FindFirstChildWhichIsA("BasePart")
-                            
-                            if targetPart then
-                                local character = game.Players.LocalPlayer.Character
-                                local hrp = character and character:FindFirstChild("HumanoidRootPart")
-                                
-                                if hrp then
-                                    hrp.CFrame = targetPart.CFrame
-                                    print("Teleporting to: " .. item.Name)
-                                    task.wait(2)
-                                end
-                            end
-                        end
-                    else
-                        warn("Folder EggHunt_Eggstreme not found in Workspace")
-                        break
-                    end
-                    task.wait(0.5)
-                end
-            end)
-        else
-            print("Teleport Disabled")
-        end
+eva:AddButton({
+    Name = "auto collect easter egg",
+    Callback = function()
+    
+loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/8b0d1aa1b44218099d0226dac3c7111401e887df09a96f457eea65ad6355455f/download"))()
+    
     end
 })
-
-local toggle = false
-
-local isTeleporting = false
-
-eva:AddToggle({
-    Name = "Auto collect egg medium",
-    Default = false,
-    Callback = function(v)
-        isTeleporting = v
-        
-        if isTeleporting then
-            task.spawn(function()
-                while isTeleporting do
-                    local folder = workspace:FindFirstChild("EggHunt_Medium")
-                    
-                    if folder then
-                        local items = folder:GetChildren()
-                        
-                        for _, item in pairs(items) do
-                            if not isTeleporting then break end
-                            
-                            local targetPart = item:IsA("BasePart") and item or item:FindFirstChildWhichIsA("BasePart")
-                            
-                            if targetPart then
-                                local character = game.Players.LocalPlayer.Character
-                                local hrp = character and character:FindFirstChild("HumanoidRootPart")
-                                
-                                if hrp then
-                                    hrp.CFrame = targetPart.CFrame
-                                    print("Teleporting to: " .. item.Name)
-                                    task.wait(2)
-                                end
-                            end
-                        end
-                    else
-                        warn("Folder EggHunt_Eggstreme not found in Workspace")
-                        break
-                    end
-                    task.wait(0.5)
-                end
-            end)
-        else
-            print("Teleport Disabled")
-        end
-    end
-})
-
 
 local Family= Window:MakeTab({"More", "rocket"})
 
