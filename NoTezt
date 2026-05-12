@@ -2,7 +2,7 @@ local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/minhd
 
 local Window = redzlib:MakeWindow({
   Title = "Xavier Hub         Brookhaven RP           [ Normal ]",
-  SubTitle = "by Ricky",
+  SubTitle = "by Fenzoxy",
   SaveFolder = "goXpp.lua"
 })
 Window:AddMinimizeButton({
@@ -21,9 +21,11 @@ Tab1:AddDiscordInvite({
 
 Window:SelectTab(Tab1)
 
-local Section = Tab1:AddSection({"Section"})
+local Section = Tab1:AddSection({"Info"})
 
-local Paragraph = Tab1:AddParagraph({"Collaboration", "see more"})
+local Paragraph = Tab1:AddParagraph({"Collaboration", "Fenzoxy (Owner)\nAnosaranike\ndenis"})
+
+local Paragraph = Tab1:AddParagraph({"Update log", "see in discord"})
 
   local Dialog = Window:Dialog({
     Title = "join discord for feedback",
@@ -53,61 +55,9 @@ game.StarterGui:SetCore("SendNotification", {
     }
   })
   
-  Tab1:AddButton({"Print", function(Value)
-print("Hello World!")
-end})
-
-local Toggle1 = Tab1:AddToggle({
-  Name = "Toggle",
-  Description = "This is a <font color='rgb(88, 101, 242)'>Toggle</font> Example",
-  Default = false 
-})
-Toggle1:Callback(function(Value)
- 
-end)
-
-Tab1:AddToggle({
-    Name = "Toggle",
-    Default = false,
-    Callback = function(v)
-
-    end
-})
-
-Tab1:AddSlider({
-  Name = "Speed",
-  Min = 1,
-  Max = 100,
-  Increase = 1,
-  Default = 16,
-  Callback = function(Value)
-  
-  end
-})
-
-local Dropdown = Tab1:AddDropdown({
-  Name = "Players List",
-  Description = "Select the <font color='rgb(88, 101, 242)'>Number</font>",
-  Options = {"one", "two", "three"},
-  Default = "two",
-  Flag = "dropdown teste",
-  Callback = function(Value)
-    
-  end
-})
-
-Tab1:AddTextBox({
-  Name = "Name item",
-  Description = "1 Item on 1 Server", 
-  PlaceholderText = "item only",
-  Callback = function(Value)
-    
-  end
-})
-
 local TrollTab = Window:MakeTab({ Title = "Scripts Trolls", Icon = "rbxassetid://13364900349" })
 
-TrollTab:AddSection({ "Invisível" })
+TrollTab:AddSection({ "Invisible" })
 
 TrollTab:AddButton({
     Name = "become invisible",
@@ -156,7 +106,7 @@ end
     end
 })
 
-local Section = TrollTab:AddSection({"FunÃƒÂ§ÃƒÂµes RGB"})
+local Section = TrollTab:AddSection({"RGB"})
 
 local isNameActive = false
 local isBioActive = false
@@ -242,13 +192,11 @@ TrollTab:AddSlider({
     end
 })
 
--- FunÃƒÂ§ÃƒÂ£o para criar cor RGB suave com HSV
 local function getRainbowColor(speedMultiplier)
     local h = (tick() * speedMultiplier % 5) / 5 -- gira o hue suavemente de 0 a 1
     return Color3.fromHSV(h, 1, 1)
 end
 
--- FunÃƒÂ§ÃƒÂ£o para disparar eventos
 local function fireServer(eventName, args)
     local event = game:GetService("ReplicatedStorage"):FindFirstChild("RE")
     if event and event:FindFirstChild(eventName) then
@@ -260,10 +208,9 @@ end
 
 local Section = TrollTab:AddSection({"RGB para usar em vocÃƒÂª"})
 
--- Nome + Bio RGB  juntos
 local nameBioRGBActive = false
 TrollTab:AddToggle({
-    Name = "Nome + Bio RGB ",
+    Name = "Name + Bio RGB ",
     Default = false,
     Callback = function(state)
         nameBioRGBActive = state
@@ -303,8 +250,8 @@ ToggleCorpo:Callback(function(Value)
 end)
 
 local ToggleCabelo = TrollTab:AddToggle({
-    Name = "RGB Cabelo",
-    Description = "RGB  no cabelo",
+    Name = "RGB hair",
+    Description = "RGB hair",
     Default = false
 })
 ToggleCabelo:Callback(function(Value)
@@ -323,8 +270,8 @@ end)
 local Section = TrollTab:AddSection({"veiculos e casa"})
 
 local ToggleCasa = TrollTab:AddToggle({
-    Name = "RGB Casa",
-    Description = "RGB  na casa",
+    Name = "RGB house",
+    Description = "RGB house",
     Default = false
 })
 ToggleCasa:Callback(function(Value)
@@ -340,11 +287,10 @@ ToggleCasa:Callback(function(Value)
     end)
 end)
 
--- Carro RGB 
 local carRGBActive = false
 TrollTab:AddToggle({
-    Name = "Carro RGB  (Premium)",
-    Description = "Altera a cor do carro com RGB contÃƒÂ­nuo. Pode causar kick se nÃƒÂ£o for premium!",
+    Name = "Car RGB  (Premium)",
+    Description = "need premium",
     Default = false,
     Callback = function(state)
         carRGBActive = state
@@ -361,8 +307,8 @@ TrollTab:AddToggle({
 })
 
 local ToggleBicicleta = TrollTab:AddToggle({
-    Name = "RGB Bicicleta",
-    Description = "RGB na bicicleta",
+    Name = "RGB bicycle",
+    Description = "RGB bicycle",
     Default = false
 })
 ToggleBicicleta:Callback(function(Value)
@@ -380,11 +326,10 @@ end)
 
 local Section = TrollTab:AddSection({"itens/tool"})
 
--- NOVO TOGGLE: RÃƒÂ¡dio RGB
 local radioRGBActive = false
 TrollTab:AddToggle({
-    Name = "RÃƒÂ¡dio RGB  ",
-    Description = "Altera a cor do rÃƒÂ¡dio com RGB contÃƒÂ­nuo",
+    Name = "RGB radio",
+    Description = "Radio RGB",
     Default = false,
     Callback = function(state)
         radioRGBActive = state
@@ -408,8 +353,8 @@ TrollTab:AddToggle({
 })
 
 local ToggleMegafone = TrollTab:AddToggle({
-    Name = "RGB Megafone",
-    Description = "RGB  no megafone",
+    Name = "RGB megaphone",
+    Description = "RGB  no megaphone",
     Default = false
 })
 ToggleMegafone:Callback(function(Value)
@@ -438,8 +383,8 @@ ToggleMegafone:Callback(function(Value)
 end)
 
 local ToggleRosquinha = TrollTab:AddToggle({
-    Name = "RGB Rosquinha",
-    Description = "RGB  na rosquinha",
+    Name = "RGB donut",
+    Description = "RGB donut",
     Default = false
 })
 ToggleRosquinha:Callback(function(Value)
@@ -481,7 +426,7 @@ local colorsTable = {
 }
 
 ToolsTab:AddButton({
-    Name = "Colorir Mapa Chão [Muito OP]",
+    Name = "Map Floor Coloring [very OP]",
     Callback = function()
       local toolselected = "PaintRoller"
 local dupeamot = 100
@@ -1280,11 +1225,11 @@ ToolsTab:AddButton({
 })
 
 Section = ToolsTab:AddSection({
-    Name = "N4zi Grip"
+    Name = "nasi Grip"
 })
 
 ToolsTab:AddButton({
-    Name = "Giant Joust Blue N4zi",
+    Name = "Giant Joust Blue Nasi",
     Callback = function()
        toolselcted = "JoustBlue"
         dupeamot = 175 --Put amouth to dupe
@@ -1605,7 +1550,7 @@ local TablaGripPos = {
 })
 
 ToolsTab:AddButton({
-    Name = "Giant Joust Red N4zi",
+    Name = "Giant Joust Red Napi",
     Callback = function()
         toolselcted = "JoustRed"
         dupeamot = 175 --Put amouth to dupe
@@ -1926,9 +1871,9 @@ local TablaGripPos = {
 })
 
 ToolsTab:AddButton({
-    Name = "(+13) Fire Alemanha nazista",
+    Name = "(+13) Fire nasia",
     Callback = function()
-        local nametools = "crystal nazi lel"
+        local nametools = "crystal nasi lel"
         local oldcframe = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
         game:GetService("StarterGui"):SetCore("SendNotification", {
             Title = "Dupe Script",
@@ -2026,9 +1971,9 @@ ToolsTab:AddButton({
 })
 
 ToolsTab:AddButton({
-    Name = "Crystal N4zi",
+    Name = "Crystal Nasi",
     Callback = function()
-        local nametools = "crystal nazi lel"
+        local nametools = "crystal nasi lel"
         local oldcframe = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
         game:GetService("StarterGui"):SetCore("SendNotification", {
             Title = "Dupe Script",
@@ -2126,9 +2071,9 @@ ToolsTab:AddButton({
 })
 
 ToolsTab:AddButton({
-    Name = "FireX N4zi",
+    Name = "FireX Nasip",
     Callback = function()
-        local nametools = "nazi firex lel"
+        local nametools = "nazsp firex lel"
         local oldcframe = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
         game:GetService("StarterGui"):SetCore("SendNotification", {
             Title = "Dupe Script",
@@ -3346,7 +3291,6 @@ ToolsTab:AddButton({
     end
 })
 
--- part 2
 local Tab = Window:MakeTab({"Lag Server", "bomb"})
 
 local Section = Tab:AddSection({
@@ -3521,7 +3465,6 @@ local Section = Tab:AddSection({
     Name = "Lag com Bomba"
 })
 
-
 local BombActive = false
 
 Tab:AddToggle({
@@ -3577,8 +3520,6 @@ Tab:AddParagraph({
     "Informação de Lag",
     "O script começa a causar lag após 35 segundos"
 })
-
-
 
 local CarTab = Window:MakeTab({"Cars", "car"})
 
@@ -4477,6 +4418,46 @@ Ava:AddButton({
 local Section = Ava:AddSection({"glitch (OP)"})
 
 Ava:AddButton({
+    Name = "Fake Tank",
+    Callback = function()
+
+local args = {
+	78771157166582
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Wear"):InvokeServer(unpack(args))
+   
+task.wait(2)
+
+local args = {
+	754637456
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Wear"):InvokeServer(unpack(args))
+   
+task.wait(2)
+
+local args = {
+	754637084
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Wear"):InvokeServer(unpack(args))
+   
+task.wait(2)
+
+ local args = {
+	754636298
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Wear"):InvokeServer(unpack(args))
+   
+ task.wait(2)
+ 
+   local args = {
+	754635032
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Wear"):InvokeServer(unpack(args))
+   
+   end
+})
+
+Ava:AddButton({
     Name = "Fake white car (use shiftlock)",
     Callback = function()
 
@@ -4520,11 +4501,9 @@ local Section = Ava:AddSection({"Avatar"})
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- Namespace para evitar conflitos
 local AvatarManager = {}
 AvatarManager.ReplicatedStorage = ReplicatedStorage
 
--- FunÃƒÂ§ÃƒÂ£o para exibir notificaÃƒÂ§ÃƒÂ£o
 function AvatarManager:MostrarNotificacao(mensagem)
     pcall(function()
         game:GetService("StarterGui"):SetCore("SendNotification", {
@@ -4565,7 +4544,6 @@ AvatarManager.Avatares = {
     { Nome = "Simon azul", ID = 76155710249925 }
 }
 
--- FunÃƒÂ§ÃƒÂ£o para obter os nomes dos avatares para o dropdown
 function AvatarManager:GetAvatarNames()
     local nomes = {}
     for _, avatar in ipairs(self.Avatares) do
@@ -4574,7 +4552,6 @@ function AvatarManager:GetAvatarNames()
     return nomes
 end
 
--- FunÃƒÂ§ÃƒÂ£o para equipar o avatar
 function AvatarManager:EquiparAvatar(avatarName)
     for _, avatar in ipairs(self.Avatares) do
         if avatar.Nome == avatarName then
@@ -4593,8 +4570,6 @@ function AvatarManager:EquiparAvatar(avatarName)
     self:MostrarNotificacao("Avatar " .. avatarName .. " nÃƒÂ£o encontrado!")
 end
 
--- Tab3: OpÃƒÂ§ÃƒÂ£o de Avatar
--- Dropdown para avatares
 local AvatarDropdown = Ava:AddDropdown({
     Name = "assesorios 3D",
     Description = "Selecione  para equipar",
@@ -4605,7 +4580,6 @@ local AvatarDropdown = Ava:AddDropdown({
     end
 })
 
--- BotÃƒÂ£o para equipar avatar
 Ava:AddButton({
     Name = "equipar ",
     Description = "Equipar selecionado",
@@ -4625,11 +4599,11 @@ Ava:AddButton({
     Callback = function()
         local args = {
             {
-                126354114956642, -- perna Direita
-                106810508343012, --Perna Esquerda
-                124765145869332, -- BraÃƒÂ§o-Direito
-                93993406355955, --Bra-o Esquerdo
-                115715495298905, --Torso
+                126354114956642, 
+                106810508343012, 
+                124765145869332, 
+                93993406355955, 
+                115715495298905, 
                 123695349157584,
                 106537993816942
             }
@@ -4647,12 +4621,12 @@ Ava:AddButton({
     Callback = function()
         local args = {
             {
-                79397492843080, -- Perna Direita
-                128106725992124,  -- Perna Esquerda
-                129643681805465,  -- BraÃƒÂ§o Direito
-                121845409370294,  -- BraÃƒÂ§o Esquerdo
-                124374125166137, -- Torso
-                133717899283546   -- CabeÃƒÂ§a
+                79397492843080, 
+                128106725992124,  
+                129643681805465,  
+                121845409370294,  
+                124374125166137, 
+                133717899283546   
             }
         }
         game:GetService("ReplicatedStorage")
@@ -4668,12 +4642,12 @@ Ava:AddButton({
     Callback = function()
         local args = {
             {
-                124355047456535, -- Perna Direita
-                120507500641962,  -- Perna Esquerda
-                82273782655463,  -- BraÃƒÂ§o Direito
-                113625313757230,  -- BraÃƒÂ§o Esquerdo
-                109182039511426, -- Torso
-                0   -- CabeÃƒÂ§a
+                124355047456535, 
+                120507500641962,  
+                82273782655463,  
+                113625313757230,  
+                109182039511426, 
+                0   
             }
         }
         game:GetService("ReplicatedStorage")
@@ -4689,12 +4663,12 @@ Ava:AddButton({
     Callback = function()
         local args = {
             {
-                98454038846291, -- Perna Direita
-                93110795723782,  -- Perna Esquerda
-                131681603005543,  -- BraÃƒÂ§o Direito
-                107032747230578,  -- BraÃƒÂ§o Esquerdo
-                129341990941517, -- Torso
-                109137349673343   -- CabeÃƒÂ§a
+                98454038846291, 
+                93110795723782,  
+                131681603005543,  
+                107032747230578, 
+                129341990941517, 
+                109137349673343 ,
             }
         }
         game:GetService("ReplicatedStorage")
@@ -4710,12 +4684,12 @@ Ava:AddButton({
     Callback = function()
         local args = {
             {
-                107431241133468, -- perna Direita
-                103380121023771, --Perna Esquerda
-                76079756909323, -- BraÃƒÂ§o-Direito
-                82598238110471, --Bra-o Esquerdo
-                112722466960512, --Torso
-                93369435761093 -- Head
+                107431241133468, 
+                103380121023771, 
+                76079756909323, 
+                82598238110471, 
+                112722466960512,
+                93369435761093 
             }
         }
         game:GetService("ReplicatedStorage")
@@ -4731,12 +4705,12 @@ Ava:AddButton({
     Callback = function()
         local args = {
             {
-                18839823882, -- Perna-direita
-                18839824402, -- Perna-esquerda
-                18839824209, -- Bra-o-direito
-                18839824132, -- Bra-o-esquerdo
-                18839824113, -- Torso
-                18839824136 -- Head
+                18839823882, 
+                18839824402, 
+                18839824209, 
+                18839824132, 
+                18839824113, 
+                18839824136 
             }
         }
         game:GetService("ReplicatedStorage")
@@ -4752,12 +4726,12 @@ Ava:AddButton({
     Callback = function()
         local args = {
             {
-                117894774809436, -- Perna-direita
-                98639514624960, -- Perna-Esquerda
-                76780277149069, -- Bra-o-Direito
-                114025246656510, -- Bra-o-esquerdo
-                76928754971570, -- Torso
-                0   -- CabeÃƒÂ§a
+                117894774809436, 
+                98639514624960, 
+                76780277149069, 
+                114025246656510, 
+                76928754971570, 
+                0  
             }
         }
         game:GetService("ReplicatedStorage")
@@ -4912,7 +4886,6 @@ Ava:AddButton({
     end
 })
 
--- copy 2
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
@@ -5497,11 +5470,7 @@ function startAutoUnban()
     end
 end
 
--- part 3 troll
-
-
 local Troll = Window:MakeTab({ Title = "Troll Players", Icon = "rbxassetid://131153193945220" })
-
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -6144,7 +6113,6 @@ end
             elseif methodKill == "Couch Sem ir até o alvo [BETA]" then
                 BringWithCouch()
             else
-                -- Método de ônibus
                 local character = LocalPlayer.Character
                 local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
                 if not humanoidRootPart then
@@ -6251,7 +6219,6 @@ local function houseBanKill()
                 local EHouse
                 local availableHouses = {}
                 
-                -- Coletar todas as casas disponÃ­veis ("For Sale")
                 for _, Lot in pairs(Houses:GetChildren()) do
                     if Lot.Name == "For Sale" then
                         for _, num in pairs(Lot:GetDescendants()) do
@@ -6263,13 +6230,11 @@ local function houseBanKill()
                     end
                 end
 
-                -- Escolher uma casa aleatÃ³ria da lista
                 if #availableHouses > 0 then
                     local randomHouse = availableHouses[math.random(1, #availableHouses)]
                     EHouse = randomHouse.Lot
                     local houseNumber = randomHouse.Number
 
-                    -- Teleportar para o BuyDetector e clicar
                     local BuyDetector = EHouse:FindFirstChild("BuyHouse")
                     Pos = BuyDetector.Position
                     if BuyDetector and BuyDetector:IsA("BasePart") then
@@ -6281,11 +6246,10 @@ local function houseBanKill()
                         end
                     end
 
-                    -- Disparar o novo remote event para construir a casa
                     task.wait(0.5)
                     local args = {
-                        houseNumber, -- NÃºmero da casa aleatÃ³ria
-                        "056_House" -- Tipo da casa
+                        houseNumber, 
+                        "056_House"
                     }
                     game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Lot:BuildProperty"):FireServer(unpack(args))
                 else
@@ -6950,7 +6914,6 @@ local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local HRP = Character:WaitForChild("HumanoidRootPart")
 
--- Alvo invisível (BlackHole)
 local BlackHole = Instance.new("Part")
 BlackHole.Size = Vector3.new(100000, 100000, 100000)
 BlackHole.Transparency = 1
@@ -6959,20 +6922,16 @@ BlackHole.CanCollide = false
 BlackHole.Name = "BlackHoleTarget"
 BlackHole.Parent = Workspace
 
--- Attachment base no BlackHole
 local baseAttachment = Instance.new("Attachment")
 baseAttachment.Name = "Luscaa_BlackHoleAttachment"
 baseAttachment.Parent = BlackHole
 
--- Atualiza posição do BlackHole
 RunService.Heartbeat:Connect(function()
 	BlackHole.CFrame = HRP.CFrame
 end)
 
--- Lista de portas controladas
 local ControlledDoors = {}
 
--- Prepara uma porta para ser controlada
 local function SetupPart(part)
 	if not part:IsA("BasePart") or part.Anchored or not string.find(part.Name, "Door") then return end
 	if part:FindFirstChild("Luscaa_Attached") then return end
@@ -7009,21 +6968,18 @@ local function SetupPart(part)
 	table.insert(ControlledDoors, {Part = part, Align = align})
 end
 
--- Detecta e prepara portas existentes
 for _, obj in ipairs(Workspace:GetDescendants()) do
 	if obj:IsA("BasePart") and string.find(obj.Name, "Door") then
 		SetupPart(obj)
 	end
 end
 
--- Novas portas no futuro
 Workspace.DescendantAdded:Connect(function(obj)
 	if obj:IsA("BasePart") and string.find(obj.Name, "Door") then
 		SetupPart(obj)
 	end
 end)
 
--- Flinga jogador com timeout e retorno
 local function FlingPlayer(player)
 	local char = player.Character
 	if not char then return end
@@ -7053,7 +7009,6 @@ local function FlingPlayer(player)
 		RunService.Heartbeat:Wait()
 	end
 
-	-- Sempre retorna as portas
 	for _, data in ipairs(ControlledDoors) do
 		if data.Align then
 			data.Align.Attachment1 = baseAttachment
@@ -7061,7 +7016,6 @@ local function FlingPlayer(player)
 	end
 end
 
--- Clique (funciona no mobile)
 UserInputService.TouchTap:Connect(function(touchPositions, processed)
 	if processed then return end
 	local pos = touchPositions[1]
@@ -7322,7 +7276,6 @@ local function FlingBall(target)
     end
 end
 
--- Toque na tela para aplicar a bola
 entrada.TouchTap:Connect(function(toques, processado)
 	if not ferramentaEquipada or processado then return end
 	local pos = toques[1]
@@ -7689,7 +7642,6 @@ local function executeScriptForPlayer(targetPlayer)
     local Vehicles = Workspace.Vehicles
     local Pos
 
-
     function Check()
         if Player and Character and Humanoid and RootPart and Vehicles then
             return true
@@ -7697,7 +7649,6 @@ local function executeScriptForPlayer(targetPlayer)
             return false
         end
     end
-
 
     if Check() then
         local House = Houses:FindFirstChild(Player.Name.."House")
@@ -7714,7 +7665,6 @@ local function executeScriptForPlayer(targetPlayer)
                 end
             end
 
-
             local BuyDetector = EHouse:FindFirstChild("BuyHouse")
             Pos = BuyDetector.Position
             if BuyDetector and BuyDetector:IsA("BasePart") then
@@ -7726,7 +7676,6 @@ local function executeScriptForPlayer(targetPlayer)
                 end
             end
         end
-
 
         task.wait(0.5)
         local PreHouse = Houses:FindFirstChild(Player.Name .. "House")
@@ -7741,7 +7690,6 @@ local function executeScriptForPlayer(targetPlayer)
             task.wait(0.5)
             game:GetService("ReplicatedStorage").RE:FindFirstChild("1Gettin1gHous1e"):FireServer("PickingCustomHouse", "049_House", Number.Value)
         end
-
 
         task.wait(0.5)
         local PCar = Vehicles:FindFirstChild(Player.Name.."Car")
@@ -7763,7 +7711,6 @@ local function executeScriptForPlayer(targetPlayer)
             end
         end
 
-
         task.wait(0.5)
         local PCar = Vehicles:FindFirstChild(Player.Name.."Car")
         if PCar then
@@ -7776,7 +7723,6 @@ local function executeScriptForPlayer(targetPlayer)
                     until Humanoid.Sit
                 end
             end
-
 
             local Target = targetPlayer
             local TargetC = Target.Character
@@ -7820,15 +7766,12 @@ local function executeScriptForPlayer(targetPlayer)
     end
 
 
-    -- Deletar o veículo
     local deleteArgs = {
         [1] = "DeleteAllVehicles"
     }
     ReplicatedStorage:WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(deleteArgs))
 end
 
-
--- Iterar sobre todos os jogadores no mapa
 for _, player in pairs(Players:GetPlayers()) do
     if player ~= Player then
         executeScriptForPlayer(player)
@@ -7851,7 +7794,6 @@ Troll:AddButton({
     local Angles = 0
     local PCar = Vehicles:FindFirstChild(Player.Name.."Car")
     
-    -- Se nÃ£o tiver um carro, cria um  
             if not PCar then  
                 if RootPart then  
                     RootPart.CFrame = CFrame.new(1754, -2, 58)  
@@ -7873,7 +7815,6 @@ Troll:AddButton({
             task.wait(0.5)  
             PCar = Vehicles:FindFirstChild(Player.Name.."Car")  
       
-            -- Se o carro existir, teletransporta para o assento se necessÃ¡rio  
             if PCar then  
                 if not Humanoid.Sit then  
                     local Seat = PCar:FindFirstChild("Body") and PCar.Body:FindFirstChild("VehicleSeat")  
@@ -7886,27 +7827,23 @@ Troll:AddButton({
                 end  
             end  
       
-            -- Adiciona o BodyGyro ao carro para controle de movimento  
             local SpinGyro = Instance.new("BodyGyro")  
             SpinGyro.Parent = PCar.PrimaryPart  
             SpinGyro.MaxTorque = Vector3.new(1e7, 1e7, 1e7)  
             SpinGyro.P = 1e7  
             SpinGyro.CFrame = PCar.PrimaryPart.CFrame * CFrame.Angles(0, math.rad(90), 0)  
       
-            -- FunÃ§Ã£o de Fling em cada jogador por 3 segundos  
             local function flingPlayer(TargetC, TargetRP, TargetH)
     Angles = 0  
-                local endTime = tick() + 1  -- Define o tempo final em 2 segundos a partir de agora  
+                local endTime = tick() + 1   
                 while tick() < endTime do  
                     Angles = Angles + 100  
                     task.wait()  
       
-                    -- Movimentos e Ã¢ngulos para o Fling  
                     local kill = function(alvo, pos, angulo)  
                         PCar:SetPrimaryPartCFrame(CFrame.new(alvo.Position) * pos * angulo)  
                     end  
       
-                    -- Fling para vÃ¡rias posiÃ§Ãµes ao redor do TargetRP  
                     kill(TargetRP, CFrame.new(0, 3, 0), CFrame.Angles(math.rad(Angles), 0, 0))  
                     kill(TargetRP, CFrame.new(0, -1.5, 2), CFrame.Angles(math.rad(Angles), 0, 0))  
                     kill(TargetRP, CFrame.new(2, 1.5, 2.25), CFrame.Angles(math.rad(50), 0, 0))  
@@ -7916,22 +7853,18 @@ Troll:AddButton({
                 end  
             end  
       
-            -- Itera sobre todos os jogadores  
             for _, Target in pairs(game.Players:GetPlayers()) do  
-                -- Pula o jogador local  
                 if Target ~= Player then  
                     local TargetC = Target.Character  
                     local TargetH = TargetC and TargetC:FindFirstChildOfClass("Humanoid")  
                     local TargetRP = TargetC and TargetC:FindFirstChild("HumanoidRootPart")  
       
-                    -- Se encontrar o alvo e seus componentes, executa o fling  
                     if TargetC and TargetH and TargetRP then  
                         flingPlayer(TargetC, TargetRP, TargetH)  -- Fling no jogador atual  
                     end  
                 end  
             end  
       
-            -- Retorna o jogador para sua posiÃ§Ã£o original  
             task.wait(0.5)  
             PCar:SetPrimaryPartCFrame(CFrame.new(0, 0, 0))  
             task.wait(0.5)  
@@ -7939,7 +7872,6 @@ Troll:AddButton({
             task.wait(0.5)  
             RootPart.CFrame = OldPos  
       
-            -- Remove o BodyGyro apÃ³s o efeito  
             SpinGyro:Destroy()  
     end
 })
@@ -8507,12 +8439,10 @@ for mwef,weuerg in pairs(game.Players:GetPlayers()) do
     end 
 end 
 
--- Função para teletransportar o jogador de volta à posição inicial após 10 segundos
 task.delay(14, function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(initialPosition)
 end)
 
--- Função para limpar todas as ferramentas 0.5 segundos após teletransporte para a posição inicial
 task.delay(14.1, function()
     game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Clea1rTool1s"):FireServer(unpack(args))
 end)
@@ -8596,290 +8526,77 @@ workspace.CurrentCamera.CameraSubject=game.Players.LocalPlayer.Character:WaitFor
   end
 })
 
+local tool = Window:MakeTab({"Tools", "tool"})
+
+tool:AddButton({
+    Name = "Chainsaw",
+    Callback = function()
+      
+        local targetPlayer = game:GetService("Players").LocalPlayer
+        
+        local args = {
+            "ToolGiveToServer",
+            targetPlayer,
+            "Chainsaw"
+        }
+
+        local re = game:GetService("ReplicatedStorage"):WaitForChild("RE", 5)
+        if re then
+            local event = re:WaitForChild("1Playe1rTrigge1rEven1t", 5)
+            if event then
+                event:FireServer(unpack(args))
+            end
+        end
+    end
+})
+
+local name = Window:MakeTab({"RolePlayName", "plane"})
+
+name:AddButton({
+    Name = "Ｈｏｒｉｚｏｎ",
+    Callback = function()
+    
+    local args = {
+	"RolePlayName",
+	"Ｈｏｒｉｚｏｎ"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer(unpack(args))
+
+    
+   end
+})
+
+name:AddButton({
+    Name = "C̶o̶o̶l̶k̶i̶d̶",
+    Callback = function()
+    
+    local args = {
+	"RolePlayName",
+	"C̶o̶o̶l̶k̶i̶d̶"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer(unpack(args))
+
+    
+   end
+})
+
+name:AddButton({
+    Name = "Xavier Hub On Top",
+    Callback = function()
+    
+    local args = {
+	"RolePlayName",
+	"Xavier On Top"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer(unpack(args))
+
+  end
+})
+
 local Skybox = Window:MakeTab({"Skybox", "cloud"})
-
-Skybox:AddButton({
-    Name = "Sharingan", 
-    Callback = function()
-        -- ServiÃƒÂ§os
-        local TextChatService = game:GetService("TextChatService")
-        local Lighting = game:GetService("Lighting")
-        local Players = game:GetService("Players")
-        local ReplicatedStorage = game:GetService("ReplicatedStorage")
-        local Player = Players.LocalPlayer
-        
-        -- VariÃƒÂ¡vel global para controlar o loop
-        _G.SharinganActive = true
-
-        -- Aviso no chat
-        if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then 
-            TextChatService.TextChannels.RBXGeneral:SendAsync(
-                "hi\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r[] Sharingann"
-            )
-        else 
-            print("naruto chorou no banho F")
-        end
-
-        -- FunÃƒÂ§ÃƒÂ£o para ativar ExpansÃƒÂ£o de DomÃƒÂ­nio
-        local function ativarDominio()
-            local char = Player.Character or Player.CharacterAdded:Wait()
-            local hrp = char:WaitForChild("HumanoidRootPart")
-
-            local dominio = Instance.new("Model", workspace)
-            dominio.Name = "InfiniteVoid"
-
-            local esfera = Instance.new("Part")
-            esfera.Shape = Enum.PartType.Ball
-            esfera.Size = Vector3.new(300, 300, 300)
-            esfera.Position = hrp.Position
-            esfera.Anchored = true
-            esfera.CanCollide = false
-            esfera.Material = Enum.Material.ForceField
-            esfera.Transparency = 0.3
-            esfera.Color = Color3.fromRGB(0, 0, 0)
-            esfera.Parent = dominio
-
-            local luz = Instance.new("PointLight", esfera)
-            luz.Color = Color3.fromRGB(255, 0, 0)
-            luz.Brightness = 10
-            luz.Range = 300
-
-            local ps = Instance.new("ParticleEmitter", esfera)
-            ps.Texture = "rbxassetid://243660364"
-            ps.Color = ColorSequence.new(Color3.fromRGB(0, 153, 255))
-            ps.LightEmission = 1
-            ps.Size = NumberSequence.new(3)
-            ps.Transparency = NumberSequence.new(0.2)
-            ps.Rate = 1000
-            ps.Lifetime = NumberRange.new(2)
-            ps.Speed = NumberRange.new(0)
-            ps.VelocitySpread = 180
-
-            local som = Instance.new("Sound", esfera)
-            som.SoundId = "rbxassetid://1843527678"
-            som.Volume = 2
-            som.Looped = true
-            som:Play()
-
-            local skyOld = Lighting:FindFirstChildOfClass("Sky")
-            if skyOld then
-                skyOld.Parent = nil
-            end
-
-            local newSky = Instance.new("Sky", Lighting)
-            newSky.SkyboxBk = "rbxassetid://159454299"
-            newSky.SkyboxDn = "rbxassetid://159454296"
-            newSky.SkyboxFt = "rbxassetid://159454293"
-            newSky.SkyboxLf = "rbxassetid://159454286"
-            newSky.SkyboxRt = "rbxassetid://159454300"
-            newSky.SkyboxUp = "rbxassetid://159454288"
-        end
-
-        -- Executa a expansÃƒÂ£o de domÃƒÂ­nio
-        ativarDominio()
-
-        -- ÃƒÂudio em loop infinito no jogador
-        local selectedAudioID = 405593386
-
-        task.spawn(function()
-            while _G.SharinganActive do
-                local remote = ReplicatedStorage:FindFirstChild("RE") and ReplicatedStorage.RE:FindFirstChild("1Gu1nSound1s")
-                if remote then
-                    remote:FireServer(workspace, selectedAudioID, 1)
-                end
-
-                local root = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
-                if root then
-                    local sound = Instance.new("Sound")
-                    sound.SoundId = "rbxassetid://" .. selectedAudioID
-                    sound.Volume = 1
-                    sound.Looped = false
-                    sound.Parent = root
-                    sound:Play()
-                    sound.Ended:Connect(function() sound:Destroy() end)
-                    task.wait(sound.TimeLength + 0.1)
-                else
-                    warn("HumanoidRootPart nÃƒÂ£o encontrado")
-                    task.wait(1)
-                end
-            end
-        end)
-
-        -- ========================
-        -- ATAQUE COM ARMA: Assault
-        -- ========================
-
-        local RE = ReplicatedStorage:WaitForChild("RE")
-        local ClearEvent = RE:FindFirstChild("1Clea1rTool1s")
-        local ToolEvent = RE:FindFirstChild("1Too1l")
-        local FireEvent = RE:FindFirstChild("1Gu1n")
-
-        -- Limpa ferramentas
-        local function clearAllTools()
-            if ClearEvent then
-                ClearEvent:FireServer("ClearAllTools")
-            end
-        end
-
-        -- Solicita Assault
-        local function getAssault()
-            if ToolEvent then
-                ToolEvent:InvokeServer("PickingTools", "Assault")
-            end
-        end
-
-        -- Verifica se recebeu Assault
-        local function hasAssault()
-            return Player.Backpack:FindFirstChild("Assault") ~= nil
-        end
-
-        -- Atira em parte
-        local function fireAtPart(targetPart)
-            local gunScript = Player.Backpack:FindFirstChild("Assault")
-                and Player.Backpack.Assault:FindFirstChild("GunScript_Local")
-
-            if not gunScript or not targetPart then return end
-
-            local args = {
-                targetPart,
-                targetPart,
-                Vector3.new(1e14, 1e14, 1e14),
-                targetPart.Position,
-                gunScript:FindFirstChild("MuzzleEffect"),
-                gunScript:FindFirstChild("HitEffect"),
-                0,
-                0,
-                { false },
-                {
-                    25,
-                    Vector3.new(100, 100, 100),
-                    BrickColor.new(29),
-                    0.25,
-                    Enum.Material.SmoothPlastic,
-                    0.25
-                },
-                true,
-                false
-            }
-
-            FireEvent:FireServer(unpack(args))
-        end
-
-        -- Atira em todos os jogadores
-        local function fireAtAllPlayers(times)
-            for i = 1, times do
-                for _, player in ipairs(Players:GetPlayers()) do
-                    if player ~= Player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                        fireAtPart(player.Character.HumanoidRootPart)
-                        task.wait(0.1)
-                    end
-                end
-            end
-        end
-
-        -- Loop automÃƒÂ¡tico de ataque
-        task.spawn(function()
-            while _G.SharinganActive do
-                clearAllTools()
-                getAssault()
-
-                repeat
-                    task.wait(0.2)
-                until hasAssault() or not _G.SharinganActive
-
-                if _G.SharinganActive then
-                    fireAtAllPlayers(3)
-                    task.wait(1)
-                end
-            end
-        end)
-    end
-})
-
-Skybox:AddButton({
-    Name = "Cancelar Sharingan ",
-    Callback = function()
-        -- ServiÃƒÂ§os
-        local Lighting = game:GetService("Lighting")
-        local Players = game:GetService("Players")
-        local workspace = game:GetService("Workspace")
-        local TextChatService = game:GetService("TextChatService")
-        local Player = Players.LocalPlayer
-        
-        -- Para todos os loops
-        _G.SharinganActive = false
-
-        -- Remove o modelo "InfiniteVoid" (Sharingan)
-        local dominio = workspace:FindFirstChild("InfiniteVoid")
-        if dominio then
-            dominio:Destroy()
-        end
-
-        -- Remove sons e partÃƒÂ­culas criadas dentro do personagem
-        if Player.Character then
-            for _, obj in ipairs(Player.Character:GetDescendants()) do
-                if obj:IsA("Sound") or obj:IsA("ParticleEmitter") then
-                    obj:Destroy()
-                end
-            end
-        end
-
-        -- Remove sons extras da workspace (se existirem)
-        for _, obj in ipairs(workspace:GetDescendants()) do
-            if obj:IsA("Sound") and (obj.SoundId:find("1843527678") or obj.SoundId:find("405593386")) then
-                obj:Destroy()
-            end
-        end
-
-        -- Remove partÃƒÂ­culas da workspace
-        for _, obj in ipairs(workspace:GetDescendants()) do
-            if obj:IsA("ParticleEmitter") then
-                obj:Destroy()
-            end
-        end
-
-        -- Limpa qualquer Sky customizado
-        for _, obj in ipairs(Lighting:GetChildren()) do
-            if obj:IsA("Sky") then
-                obj:Destroy()
-            end
-        end
-
-        -- Restaura um cÃƒÂ©u padrÃƒÂ£o
-        local defaultSky = Instance.new("Sky")
-        defaultSky.SkyboxBk = "rbxassetid://7018684000"
-        defaultSky.SkyboxDn = "rbxassetid://7018684000"
-        defaultSky.SkyboxFt = "rbxassetid://7018684000"
-        defaultSky.SkyboxLf = "rbxassetid://7018684000"
-        defaultSky.SkyboxRt = "rbxassetid://7018684000"
-        defaultSky.SkyboxUp = "rbxassetid://7018684000"
-        defaultSky.Parent = Lighting
-
-        -- Limpa ferramentas do backpack
-        if Player.Backpack then
-            for _, tool in ipairs(Player.Backpack:GetChildren()) do
-                if tool:IsA("Tool") then
-                    tool:Destroy()
-                end
-            end
-        end
-
-        -- Mensagem no chat
-        if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-            TextChatService.TextChannels.RBXGeneral:SendAsync(
-                "[] Sharingan Cancelado "
-            )
-        else
-            print("Sharingan cancelado com sucesso.")
-        end
-
-        print("Efeitos do Sharingan removidos e ambiente restaurado ")
-    end
-})
 
 local Section = Skybox:AddSection({"Skybox FE"})
 
--- VariÃƒÂ¡veis para controlar os estados
 local SkyboxActive = false
 local CurrentTrack = nil
 local RigidTrack = nil
@@ -8888,7 +8605,6 @@ Skybox:AddButton({
    Name = "Skybox FE",
    Callback = function()
         if SkyboxActive then
-            -- Desativa skybox e animaÃƒÂ§ÃƒÂµes
             if CurrentTrack then
                 CurrentTrack:Stop(0.1)
                 CurrentTrack = nil
@@ -8898,10 +8614,8 @@ Skybox:AddButton({
                 RigidTrack = nil
             end
             
-            -- Primeiro reseta a aparÃƒÂªncia
             game:GetService("ReplicatedStorage").Remotes.ResetCharacterAppearance:FireServer()
             
-            -- Aguarda um pouco e entÃƒÂ£o mata o personagem
             task.wait(0.3)
             
             local Players = game:GetService("Players")
@@ -8917,7 +8631,6 @@ Skybox:AddButton({
             SkyboxActive = false
             print("Skybox e andar duro removidos!")
         else
-            -- Ativa a skybox
             local args = {
                 {
                     100839513065432
@@ -8943,7 +8656,6 @@ Skybox:AddButton({
             local character = player.Character or player.CharacterAdded:Wait()
             local humanoid = character:WaitForChild("Humanoid")
 
-            -- ConfiguraÃƒÂ§ÃƒÂµes da skybox
             local Settings = {}
             Settings["Fade In"]     = 0.1
             Settings["Fade Out"]    = 0.1
@@ -8984,14 +8696,11 @@ Skybox:AddButton({
                 return newTrack
             end
 
-            -- Executa a animaÃƒÂ§ÃƒÂ£o da skybox
             local EmoteId = 93224413172183
             LoadTrack(EmoteId)
             
-            -- Aguarda um pouco antes de ativar o planking
             task.wait(0.5)
             
-            -- Ativa a animaÃƒÂ§ÃƒÂ£o de planking (andar duro/deitado)
             local PlankingId = "rbxassetid://3695333486"
             local plankAnim = Instance.new("Animation")
             plankAnim.AnimationId = PlankingId
@@ -9005,7 +8714,6 @@ Skybox:AddButton({
     end
 })
 
--- BotÃƒÂ£o de reset completo
 Skybox:AddButton({
     Name = "Para Skybox",
     Callback = function()
@@ -9019,13 +8727,10 @@ Skybox:AddButton({
         end
         SkyboxActive = false
         
-        -- Primeiro reseta a aparÃƒÂªncia
         game:GetService("ReplicatedStorage").Remotes.ResetCharacterAppearance:FireServer()
         
-        -- Aguarda um pouco para o remote processar
         task.wait(0.3)
         
-        -- Depois mata o personagem
         local Players = game:GetService("Players")
         local player = Players.LocalPlayer
         local character = player.Character
@@ -9036,7 +8741,7 @@ Skybox:AddButton({
             end
         end
         
-        print("AparÃƒÂªncia resetada e personagem morto!")
+        print("resetada e personagem")
     end
 })
 
@@ -9053,14 +8758,7 @@ end)
 
 local eva = Window:MakeTab({"Event", "rbxassetid://16776729560"})
 
-eva:AddButton({
-    Name = "auto collect easter egg",
-    Callback = function()
-    
-loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/8b0d1aa1b44218099d0226dac3c7111401e887df09a96f457eea65ad6355455f/download"))()
-    
-    end
-})
+local Section = eva:AddSection({"Coming soon"})
 
 local Family= Window:MakeTab({"More", "rocket"})
 
@@ -9281,12 +8979,10 @@ local function startLoop()
             local hrp = getHRP()
             originalCFrame = hrp.CFrame
 
-            -- Script 1: Clear tools
             clearTools()
             task.wait(1)
             if not toggle then break end
 
-            -- Script 2: Pick tool + equip
             pickTool()
             equipTool()
             if not toggle then break end
@@ -9320,18 +9016,15 @@ local function startLoop()
             end
             if not toggle then break end
 
-            -- Teleport ke posisi -45, -53, 88
             local hrp = getHRP()
             hrp.CFrame = CFrame.new(92, -191, 9422)
             task.wait(0.7)
             if not toggle then break end
 
-            -- Script 3: Clear tools pas di posisi teleport
             clearTools()
             task.wait(0.5)
             if not toggle then break end
 
-            -- Teleport balik ke posisi semula
             if originalCFrame then
                 local hrp = getHRP()
                 hrp.CFrame = originalCFrame
@@ -9339,7 +9032,6 @@ local function startLoop()
             task.wait(0.5)
             if not toggle then break end
 
-            -- Script 4: Pick tool + equip lagi (loop ulang)
             pickTool()
             equipTool()
             task.wait(1)
@@ -9347,7 +9039,6 @@ local function startLoop()
     end)
 end
 
--- Toggle UI
 Family:AddToggle({
     Name = "kill all using shoppingCart",
     Default = false,
@@ -9364,59 +9055,4 @@ Family:AddToggle({
     end
 })
 
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local LocalPlayer = Players.LocalPlayer -- Mendeteksi kamu sendiri
-local Remote = ReplicatedStorage:WaitForChild("RE"):WaitForChild("1Playe1rTrigge1rEven1t")
-
-local isRunning = false
-
-Family:AddToggle({
-    Name = "bring all",
-    Default = false,
-    Callback = function(v)
-        isRunning = v
-        
-        task.spawn(function()
-            while isRunning do
-                local allPlayers = Players:GetPlayers()
-                
-                for _, targetPlayer in ipairs(allPlayers) do
-                    -- CEK: Jika toggle dimatikan, langsung berhenti
-                    if not isRunning then break end
-                    
-                    -- WHITELIST: Lewati jika target adalah kamu sendiri
-                    if targetPlayer == LocalPlayer then 
-                        continue 
-                    end
-                    
-                    -- Pastikan pemain masih ada di server
-                    if targetPlayer and targetPlayer.Parent then
-                        
-                        -- Script 1: Client2Client
-                        local args1 = {
-                            "Client2Client",
-                            "Request: Piggyback!",
-                            targetPlayer -- Otomatis mengambil pemain yang sedang di-loop
-                        }
-                        Remote:FireServer(unpack(args1))
-                        
-                        -- Script 2: DropButtonStopAll
-                        local args2 = {
-                            "DropButtonStopAll",
-                            targetPlayer
-                        }
-                        Remote:FireServer(unpack(args2))
-                        
-                        -- Tunggu 4 detik sebelum ganti ke pemain berikutnya
-                        task.wait(4)
-                    end
-                end
-                
-                -- Jeda sebentar sebelum mulai loop dari awal daftar pemain lagi
-                task.wait(1) 
-            end
-        end)
-    end
-})
-
+local hub = Window:MakeTab({"Other script", "lock"})
